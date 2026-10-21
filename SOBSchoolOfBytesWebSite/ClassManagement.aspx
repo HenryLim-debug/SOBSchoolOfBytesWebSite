@@ -46,7 +46,7 @@
             <asp:Button ID="CreateButton" runat="server" Text="Create Class" CssClass="btn btn-primary align-self-start mt-4" ValidationGroup="CreateClass" OnClick="CreateButton_Click" />
         </section>
         <h2 class="mt-4">Classes</h2>
-        <p>Closing enrolment stops new students joining. Existing students keep their places and timetable.</p>
+        <p>Closing enrolment stops new applications and new assignments to this group. Existing students keep their places and timetable.</p>
         <asp:Button ID="RefreshButton" runat="server" Text="Refresh List" CssClass="btn btn-outline-primary mb-3" CausesValidation="false" OnClick="RefreshButton_Click" />
         <div class="table-responsive">
             <asp:GridView ID="Classes" runat="server" AutoGenerateColumns="false" DataKeyNames="ClassId,IsOpen" CssClass="table table-bordered align-middle" GridLines="None"

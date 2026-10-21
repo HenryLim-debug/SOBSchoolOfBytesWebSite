@@ -10,6 +10,5 @@ namespace SOBSchoolOfBytesWebSite
         protected global::System.Web.UI.WebControls.TextBox staffId;
         protected global::System.Web.UI.WebControls.TextBox pwd;
         protected global::System.Web.UI.WebControls.Button SignInButton;
-        protected global::System.Web.UI.WebControls.Panel SetupLinkPanel;
     }
 }

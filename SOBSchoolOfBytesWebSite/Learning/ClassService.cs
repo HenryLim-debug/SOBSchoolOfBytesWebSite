@@ -62,7 +62,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
         }
     }
 
-    public static class ClassService
+    public static partial class ClassService
     {
         // School dates and times are always Malaysia time, independent of the server's timezone.
         public static DateTime SchoolNow { get { return DateTime.UtcNow.AddHours(8); } }
@@ -141,12 +141,17 @@ namespace SOBSchoolOfBytesWebSite.Learning
             for (int i = classes.Rows.Count - 1; i >= 0; i--)
                 if (ClassSchedule.FromRow(classes.Rows[i]).FirstLesson <= SchoolNow) classes.Rows.RemoveAt(i);
             classes.Columns.Add("AlreadyEnrolled", typeof(bool));
+            classes.Columns.Add("ApplicationPending", typeof(bool));
             DataTable enrolled = Query("SELECT CourseId FROM dbo.CourseEnrolments WHERE StudentId=@student AND IsActive=1", Int("@student", studentId));
+            DataTable pending = Query("SELECT CourseId FROM dbo.CourseApplications WHERE StudentId=@student AND Status=N'Pending'", Int("@student", studentId));
             foreach (DataRow row in classes.Rows)
             {
                 bool found = false;
                 foreach (DataRow course in enrolled.Rows) if ((int)course["CourseId"] == (int)row["CourseId"]) found = true;
                 row["AlreadyEnrolled"] = found;
+                bool waiting = false;
+                foreach (DataRow course in pending.Rows) if ((int)course["CourseId"] == (int)row["CourseId"]) waiting = true;
+                row["ApplicationPending"] = waiting;
             }
             return classes;
         }
@@ -250,35 +255,34 @@ namespace SOBSchoolOfBytesWebSite.Learning
                 }
             }
         }
-        public static void Enrol(int studentId, int classId)
+        // The caller must hold LockChanges for the entire transaction. Only an
+        // approved application may call EnrolWithinTransaction to allocate a place.
+        private static DataRow CheckEnrolment(SqlConnection connection, SqlTransaction transaction, int studentId, int classId)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {
-                connection.Open();
-                using (SqlTransaction transaction = connection.BeginTransaction())
-                {
-                    LockChanges(connection, transaction); RequireAccount(connection, transaction, studentId, "Student", "Approved");
-                    DataTable table = Query(connection, transaction, "SELECT * FROM dbo.CourseClasses WHERE ClassId=@class", Int("@class", classId));
-                    if (table.Rows.Count != 1) throw new ClassRuleException("This class is no longer available.");
-                    DataRow row = table.Rows[0]; ClassSchedule schedule = ClassSchedule.FromRow(row);
-                    if (!(bool)row["IsOpen"] || schedule.FirstLesson <= SchoolNow) throw new ClassRuleException("Enrolment is closed for this class.");
-                    CheckTeacher(connection, transaction, (int)row["TeacherId"], (int)row["CourseId"]);
-                    using (SqlCommand command = Command(connection, transaction, "SELECT COUNT(*) FROM dbo.CourseEnrolments WHERE StudentId=@student AND CourseId=@course AND IsActive=1",
-                        Int("@student", studentId), Int("@course", (int)row["CourseId"])))
-                        if ((int)command.ExecuteScalar() != 0) throw new ClassRuleException("You are already enrolled in this course. Withdraw from your current class before choosing another group.");
-                    using (SqlCommand command = Command(connection, transaction, "SELECT COUNT(*) FROM dbo.CourseEnrolments WHERE ClassId=@class AND IsActive=1", Int("@class", classId)))
-                        if ((int)command.ExecuteScalar() >= 10) throw new ClassRuleException("This class is full. Please choose another group.");
-                    DataTable current = Query(connection, transaction, @"SELECT cl.* FROM dbo.CourseEnrolments e JOIN dbo.CourseClasses cl ON cl.ClassId=e.ClassId
-                        WHERE e.StudentId=@student AND e.IsActive=1", Int("@student", studentId));
-                    foreach (DataRow other in current.Rows) if (schedule.Overlaps(ClassSchedule.FromRow(other)))
-                        throw new ClassRuleException("This class clashes with your timetable. Choose another group.");
-                    using (SqlCommand command = Command(connection, transaction, @"UPDATE dbo.CourseEnrolments SET IsActive=1,EnrolledAt=SYSUTCDATETIME(),WithdrawnAt=NULL
-                        WHERE StudentId=@student AND ClassId=@class;
-                        IF @@ROWCOUNT=0 INSERT INTO dbo.CourseEnrolments(StudentId,ClassId,CourseId) VALUES(@student,@class,@course)",
-                        Int("@student", studentId), Int("@class", classId), Int("@course", (int)row["CourseId"]))) command.ExecuteNonQuery();
-                    transaction.Commit();
-                }
-            }
+            RequireAccount(connection, transaction, studentId, "Student", "Approved");
+            DataTable table = Query(connection, transaction, "SELECT * FROM dbo.CourseClasses WHERE ClassId=@class", Int("@class", classId));
+            if (table.Rows.Count != 1) throw new ClassRuleException("This class is no longer available.");
+            DataRow row = table.Rows[0]; ClassSchedule schedule = ClassSchedule.FromRow(row);
+            if (!(bool)row["IsOpen"] || schedule.FirstLesson <= SchoolNow) throw new ClassRuleException("Enrolment is closed for this class.");
+            CheckTeacher(connection, transaction, (int)row["TeacherId"], (int)row["CourseId"]);
+            using (SqlCommand command = Command(connection, transaction, "SELECT COUNT(*) FROM dbo.CourseEnrolments WHERE StudentId=@student AND CourseId=@course AND IsActive=1",
+                Int("@student", studentId), Int("@course", (int)row["CourseId"])))
+                if ((int)command.ExecuteScalar() != 0) throw new ClassRuleException("You are already enrolled in this course. Withdraw from your current class before choosing another group.");
+            using (SqlCommand command = Command(connection, transaction, "SELECT COUNT(*) FROM dbo.CourseEnrolments WHERE ClassId=@class AND IsActive=1", Int("@class", classId)))
+                if ((int)command.ExecuteScalar() >= 10) throw new ClassRuleException("This class is full. Please choose another group.");
+            DataTable current = Query(connection, transaction, @"SELECT cl.* FROM dbo.CourseEnrolments e JOIN dbo.CourseClasses cl ON cl.ClassId=e.ClassId
+                WHERE e.StudentId=@student AND e.IsActive=1", Int("@student", studentId));
+            foreach (DataRow other in current.Rows) if (schedule.Overlaps(ClassSchedule.FromRow(other)))
+                throw new ClassRuleException("This class clashes with your timetable. Choose another group.");
+            return row;
+        }
+        private static void EnrolWithinTransaction(SqlConnection connection, SqlTransaction transaction, int studentId, int classId)
+        {
+            DataRow row = CheckEnrolment(connection, transaction, studentId, classId);
+            using (SqlCommand command = Command(connection, transaction, @"UPDATE dbo.CourseEnrolments SET IsActive=1,EnrolledAt=SYSUTCDATETIME(),WithdrawnAt=NULL
+                WHERE StudentId=@student AND ClassId=@class;
+                IF @@ROWCOUNT=0 INSERT INTO dbo.CourseEnrolments(StudentId,ClassId,CourseId) VALUES(@student,@class,@course)",
+                Int("@student", studentId), Int("@class", classId), Int("@course", (int)row["CourseId"]))) command.ExecuteNonQuery();
         }
         public static void Withdraw(int actorId, int enrolmentId)
         {

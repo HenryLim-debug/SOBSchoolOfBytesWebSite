@@ -53,7 +53,7 @@ namespace SOBSchoolOfBytesWebSite
             try
             {
                 ClassService.CreateClass(CurrentAccount.Id,teacher,ClassName.Text,new ClassSchedule{FirstMonday=monday,DayOne=day1,TimeOne=time1,DayTwo=day2,TimeTwo=time2});
-                ClassName.Text="";LoadClasses();Show("Class created. Students can now choose this class when enrolling.",true);
+                ClassName.Text="";LoadClasses();Show("Class created. Students can now apply for this class.",true);
             }
             catch(ClassRuleException exception){Show(exception.Message,false);}
             catch(SqlException exception)

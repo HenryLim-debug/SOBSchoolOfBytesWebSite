@@ -19,6 +19,7 @@
             <a runat="server" href="~/TeacherManagement" class="btn btn-primary">Manage Teachers</a>
             <a runat="server" href="~/StudentManagement" class="btn btn-outline-primary">Manage Students</a>
             <a runat="server" href="~/ClassManagement" class="btn btn-outline-primary">Manage Classes</a>
+            <a runat="server" href="~/ReviewTeachingHours" class="btn btn-outline-primary">Review Teaching Hours</a>
         </div>
         <section class="mt-4" aria-labelledby="pendingTitle">
             <h2 id="pendingTitle">Student Approval</h2>

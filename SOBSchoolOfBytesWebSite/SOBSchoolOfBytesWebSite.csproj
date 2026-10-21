@@ -69,6 +69,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
@@ -146,11 +147,24 @@
     <Content Include="StudentRegistration.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="StaffLogin.aspx" />
-    <Content Include="PresidentSetup.aspx" />
     <Content Include="PresidentDashboard.aspx" />
     <Content Include="TeacherManagement.aspx" />
     <Content Include="ClassManagement.aspx" />
     <Content Include="Courses.aspx" />
+    <Content Include="CourseApplications.aspx" />
+    <Content Include="TeacherMaterials.aspx" />
+    <Content Include="CourseLearning.aspx" />
+    <Content Include="Database\005_CourseChapters.sql" />
+    <Content Include="Database\006_ChapterDocuments.sql" />
+    <Content Include="ChapterDownload.ashx" />
+    <Content Include="StudentSubmission.aspx" />
+    <Content Include="TeacherSubmissions.aspx" />
+    <Content Include="SubmissionDownload.ashx" />
+    <Content Include="Database\007_AssignmentSubmissions.sql" />
+    <Content Include="Database\008_TeachingHours.sql" />
+    <Content Include="TeachingHours.aspx" />
+    <Content Include="ReviewTeachingHours.aspx" />
+    <Content Include="Database\004_CourseApplications.sql" />
     <Content Include="ClassRoster.aspx" />
     <Content Include="StudentManagement.aspx" />
     <Content Include="Database\002_TeacherCourses.sql" />
@@ -263,13 +277,6 @@
     <Compile Include="StaffLogin.aspx.designer.cs">
       <DependentUpon>StaffLogin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PresidentSetup.aspx.cs">
-      <DependentUpon>PresidentSetup.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PresidentSetup.aspx.designer.cs">
-      <DependentUpon>PresidentSetup.aspx</DependentUpon>
-    </Compile>
     <Compile Include="PresidentDashboard.aspx.cs">
       <DependentUpon>PresidentDashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -320,8 +327,68 @@
       <DependentUpon>TeacherDashboard.aspx</DependentUpon>
     </Compile>
     <Compile Include="Security\AccountAccess.cs" />
-    <Compile Include="Security\PresidentBootstrap.cs" />
     <Compile Include="Learning\ClassService.cs" />
+    <Compile Include="Learning\CourseApplicationService.cs" />
+    <Compile Include="Learning\MaterialService.cs" />
+    <Compile Include="Learning\ChapterUpload.cs" />
+    <Compile Include="Learning\SubmissionFile.cs" />
+    <Compile Include="Learning\SubmissionService.cs" />
+    <Compile Include="Learning\TeachingHoursService.cs" />
+    <Compile Include="TeachingHours.aspx.cs">
+      <DependentUpon>TeachingHours.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TeachingHours.aspx.designer.cs">
+      <DependentUpon>TeachingHours.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReviewTeachingHours.aspx.cs">
+      <DependentUpon>ReviewTeachingHours.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReviewTeachingHours.aspx.designer.cs">
+      <DependentUpon>ReviewTeachingHours.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StudentSubmission.aspx.cs">
+      <DependentUpon>StudentSubmission.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StudentSubmission.aspx.designer.cs">
+      <DependentUpon>StudentSubmission.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TeacherSubmissions.aspx.cs">
+      <DependentUpon>TeacherSubmissions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TeacherSubmissions.aspx.designer.cs">
+      <DependentUpon>TeacherSubmissions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SubmissionDownload.ashx.cs">
+      <DependentUpon>SubmissionDownload.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="ChapterDownload.ashx.cs">
+      <DependentUpon>ChapterDownload.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="TeacherMaterials.aspx.cs">
+      <DependentUpon>TeacherMaterials.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TeacherMaterials.aspx.designer.cs">
+      <DependentUpon>TeacherMaterials.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CourseLearning.aspx.cs">
+      <DependentUpon>CourseLearning.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CourseLearning.aspx.designer.cs">
+      <DependentUpon>CourseLearning.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CourseApplications.aspx.cs">
+      <DependentUpon>CourseApplications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CourseApplications.aspx.designer.cs">
+      <DependentUpon>CourseApplications.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Security\StudentAccess.cs" />
     <Compile Include="StudentLogin.aspx.cs">
       <DependentUpon>StudentLogin.aspx</DependentUpon>

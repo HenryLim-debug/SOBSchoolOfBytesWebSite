@@ -7,6 +7,12 @@
             <asp:Button ID="SignOutButton" runat="server" Text="Sign Out" CssClass="btn btn-outline-secondary"
                 CausesValidation="false" OnClick="SignOutButton_Click" />
         </div>
+        <p class="mt-3 d-flex flex-wrap gap-2">
+            <a runat="server" href="~/CourseApplications" class="btn btn-primary">Review Course Applications</a>
+            <a runat="server" href="~/TeacherMaterials" class="btn btn-outline-primary">Manage Teaching Materials</a>
+            <a runat="server" href="~/TeacherSubmissions" class="btn btn-outline-primary">Review Student Work</a>
+            <a runat="server" href="~/TeachingHours" class="btn btn-outline-primary">My Teaching Hours</a>
+        </p>
         <section class="card p-4 mt-3" aria-labelledby="teacherAccountTitle">
             <h2 id="teacherAccountTitle" class="h4">Your Account</h2>
             <p>Username: <asp:Literal ID="TeacherUsername" runat="server" Mode="Encode" /></p>

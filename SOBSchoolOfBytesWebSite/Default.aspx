@@ -26,7 +26,7 @@
 
             <h2 id="coursesTitle">Our Courses</h2>
             <p>Explore four learning areas designed for young beginners.</p>
-            <p><a runat="server" href="~/Courses" class="btn btn-outline-primary">View Classes and Enrol</a></p>
+            <p><a runat="server" href="~/Courses" class="btn btn-outline-primary">View Classes and Apply</a></p>
 
             <div class="row g-4">
 

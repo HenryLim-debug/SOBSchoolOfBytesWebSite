@@ -9,5 +9,7 @@ namespace SOBSchoolOfBytesWebSite
         protected global::System.Web.UI.WebControls.Panel FeedbackPanel;
         protected global::System.Web.UI.WebControls.Literal FeedbackMessage;
         protected global::System.Web.UI.WebControls.GridView MyClasses;
+        protected global::System.Web.UI.WebControls.GridView MyApplications;
+        protected global::System.Web.UI.WebControls.Button RefreshApplicationsButton;
     }
 }

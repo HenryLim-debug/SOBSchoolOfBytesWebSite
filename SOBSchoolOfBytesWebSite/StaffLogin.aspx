@@ -32,9 +32,6 @@
                     ValidationGroup="StaffLogin" OnClick="SignInButton_Click" />
                 <p class="mt-3 mb-0"><a runat="server" href="~/StudentLogin">Go to Student Login</a></p>
             </div>
-            <asp:Panel ID="SetupLinkPanel" runat="server" Visible="false" CssClass="alert alert-info mt-3">
-                First time setting up the school? <a runat="server" href="~/PresidentSetup">Create the first president account</a>.
-            </asp:Panel>
         </div>
     </main>
 </asp:Content>

@@ -26,19 +26,16 @@ namespace SOBSchoolOfBytesWebSite
                     return;
                 }
                 AccountAccess.ClearSignIn(Context);
-                SetupLinkPanel.Visible = Request.IsLocal && PresidentBootstrap.IsAvailable();
             }
             catch (SqlException exception)
             {
                 Trace.Warn("StaffLogin", "Could not check current access.", exception);
                 ShowError("Sign in is unavailable right now. Please try again later.");
             }
-            if (Request.QueryString["setup"] == "1" || Request.QueryString["signedOut"] == "1")
+            if (Request.QueryString["signedOut"] == "1")
             {
                 SuccessPanel.Visible = true;
-                SuccessMessage.Text = Request.QueryString["setup"] == "1"
-                    ? "Your president account is ready. Sign in with the details you just created."
-                    : "You have signed out successfully.";
+                SuccessMessage.Text = "You have signed out successfully.";
             }
             if (Request.QueryString["unavailable"] == "1")
                 ShowError("Sign in is unavailable right now. Please try again later.");
