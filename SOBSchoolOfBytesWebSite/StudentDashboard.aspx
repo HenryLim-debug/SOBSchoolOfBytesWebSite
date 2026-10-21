@@ -15,6 +15,8 @@
         <h2>Explore your learning options</h2>
         <p>Discover computer fundamentals, internet safety, office applications and beginner Python.</p>
         <a class="btn btn-primary" runat="server" href="~/Courses">Browse Our Courses</a>
+        <a runat="server" href="~/StudentAttendance" class="btn btn-outline-primary">My Attendance</a>
+        <a runat="server" href="~/LearningProgress" class="btn btn-outline-primary">My Learning Progress</a>
 
         <asp:Panel ID="FeedbackPanel" runat="server" Visible="false" role="status"><asp:Literal ID="FeedbackMessage" runat="server" Mode="Encode" /></asp:Panel>
         <section class="mt-4" aria-labelledby="myApplicationsTitle">
@@ -58,6 +60,11 @@
                     <asp:BoundField DataField="TeacherName" HeaderText="Teacher" HtmlEncode="true" />
                     <asp:BoundField DataField="WeeklySchedule" HeaderText="Weekly sessions" HtmlEncode="true" />
                     <asp:BoundField DataField="CourseDates" HeaderText="Course dates" HtmlEncode="true" />
+                        <asp:TemplateField HeaderText="Online class"><ItemTemplate>
+                            <asp:HyperLink runat="server" Text="Join Online Class" CssClass="btn btn-primary btn-sm" Target="_blank" rel="noopener noreferrer"
+                                NavigateUrl='<%# ResolveUrl("~/JoinClass?id=" + Eval("ClassId")) %>' Visible='<%# Convert.ToBoolean(Eval("HasMeetingLink")) %>' />
+                            <asp:Literal runat="server" Text="Meeting link not added yet" Mode="Encode" Visible='<%# !Convert.ToBoolean(Eval("HasMeetingLink")) %>' />
+                        </ItemTemplate></asp:TemplateField>
                         <asp:TemplateField HeaderText="Learning"><ItemTemplate>
                             <a class="btn btn-outline-primary btn-sm" href='<%# ResolveUrl("~/CourseLearning?course=" + Eval("CourseId")) %>'>Learning Materials</a>
                         </ItemTemplate></asp:TemplateField>

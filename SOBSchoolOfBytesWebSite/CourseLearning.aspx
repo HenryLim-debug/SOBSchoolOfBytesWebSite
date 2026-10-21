@@ -24,6 +24,14 @@
                     <p class="text-muted">Chapter <asp:Literal ID="ChapterNumber" runat="server" Mode="Encode" /></p>
                     <h2 id="lessonTitle"><asp:Literal ID="LessonTitle" runat="server" Mode="Encode" /></h2>
                     <asp:HyperLink ID="SubmitWorkLink" runat="server" Text="Submit Work / View Feedback" CssClass="btn btn-success mt-3" />
+                    <div class="border rounded p-3 mt-3">
+                        <h3 class="h5">My Chapter Checklist</h3>
+                        <p>After reviewing the materials, mark this chapter complete. You can undo this later; it does not change your assignment or mark.</p>
+                        <p role="status"><asp:Literal ID="CompletionStatus" runat="server" Mode="Encode" /></p>
+                        <asp:Button ID="CompleteButton" runat="server" Text="Mark Chapter Complete" CommandArgument="complete" OnCommand="Completion_Command" CausesValidation="false" CssClass="btn btn-primary" />
+                        <asp:Button ID="UndoCompleteButton" runat="server" Text="Mark as Not Completed" CommandArgument="undo" OnCommand="Completion_Command" CausesValidation="false" CssClass="btn btn-outline-secondary" />
+                        <a runat="server" href="~/LearningProgress" class="btn btn-outline-primary">My Learning Progress</a>
+                    </div>
                     <asp:Panel ID="DocumentsPanel" runat="server" Visible="false" CssClass="mt-4">
                         <h3 class="h5">Learning Materials</h3>
                         <p>Download the slides to review the lesson, then open the Word tutorial document for the questions.</p>

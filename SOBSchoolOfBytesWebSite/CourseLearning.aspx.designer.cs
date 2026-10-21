@@ -12,6 +12,9 @@
         protected global::System.Web.UI.WebControls.Literal ChapterNumber;
         protected global::System.Web.UI.WebControls.Literal LessonTitle;
         protected global::System.Web.UI.WebControls.HyperLink SubmitWorkLink;
+        protected global::System.Web.UI.WebControls.Literal CompletionStatus;
+        protected global::System.Web.UI.WebControls.Button CompleteButton;
+        protected global::System.Web.UI.WebControls.Button UndoCompleteButton;
         protected global::System.Web.UI.WebControls.Panel DocumentsPanel;
         protected global::System.Web.UI.WebControls.HyperLink DownloadSlides;
         protected global::System.Web.UI.WebControls.HyperLink DownloadTutorial;

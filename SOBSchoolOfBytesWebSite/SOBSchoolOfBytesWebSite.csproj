@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -433,9 +433,7 @@
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
@@ -485,4 +483,76 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
+  <ItemGroup>
+    <Content Include="Database\009_TeacherSalaries.sql" />
+    <Compile Include="Learning\SalaryService.cs" />
+    <Content Include="TeacherSalary.aspx" />
+    <Compile Include="TeacherSalary.aspx.cs">
+      <DependentUpon>TeacherSalary.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TeacherSalary.aspx.designer.cs">
+      <DependentUpon>TeacherSalary.aspx</DependentUpon>
+    </Compile>
+    <Content Include="SalaryManagement.aspx" />
+    <Compile Include="SalaryManagement.aspx.cs">
+      <DependentUpon>SalaryManagement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SalaryManagement.aspx.designer.cs">
+      <DependentUpon>SalaryManagement.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Database\010_ClassMeetingLinks.sql" />
+    <Compile Include="Learning\MeetingService.cs" />
+    <Content Include="ClassMeetings.aspx" />
+    <Compile Include="ClassMeetings.aspx.cs">
+      <DependentUpon>ClassMeetings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClassMeetings.aspx.designer.cs">
+      <DependentUpon>ClassMeetings.aspx</DependentUpon>
+    </Compile>
+    <Content Include="JoinClass.aspx" />
+    <Compile Include="JoinClass.aspx.cs">
+      <DependentUpon>JoinClass.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="JoinClass.aspx.designer.cs">
+      <DependentUpon>JoinClass.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Database\011_Attendance.sql" />
+    <Compile Include="Learning\AttendanceService.cs" />
+    <Content Include="Attendance.aspx" />
+    <Compile Include="Attendance.aspx.cs">
+      <DependentUpon>Attendance.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Attendance.aspx.designer.cs">
+      <DependentUpon>Attendance.aspx</DependentUpon>
+    </Compile>
+    <Content Include="StudentAttendance.aspx" />
+    <Compile Include="StudentAttendance.aspx.cs">
+      <DependentUpon>StudentAttendance.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StudentAttendance.aspx.designer.cs">
+      <DependentUpon>StudentAttendance.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Database\012_LearningProgress.sql" />
+    <Compile Include="Learning\ProgressService.cs" />
+    <Content Include="LearningProgress.aspx" />
+    <Compile Include="LearningProgress.aspx.cs">
+      <DependentUpon>LearningProgress.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LearningProgress.aspx.designer.cs">
+      <DependentUpon>LearningProgress.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

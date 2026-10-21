@@ -70,6 +70,12 @@ namespace SOBSchoolOfBytesWebSite.Learning
                         Id("@actor",teacherId),Id("@class",classId)));
                     if(!ClassSchedule.FromRow(cl).LessonStarts().Contains(start) || start.AddHours(2)>ClassService.SchoolNow)
                         throw new ClassRuleException("Select a scheduled lesson that has already finished. Future lessons cannot be recorded as taught.");
+                    DataTable overlaps=Query(connection,transaction,@"SELECT LogId FROM dbo.TeachingHourLogs WITH(UPDLOCK,HOLDLOCK)
+                        WHERE TeacherId=@actor AND ClassId<>@class AND Status IN(N'Pending',N'Approved')
+                        AND SessionStartLocal<@end AND DATEADD(MINUTE,Minutes,SessionStartLocal)>@start",
+                        Id("@actor",teacherId),Id("@class",classId),new SqlParameter("@start",SqlDbType.DateTime2){Value=start},
+                        new SqlParameter("@end",SqlDbType.DateTime2){Value=start.AddHours(2)});
+                    if(overlaps.Rows.Count!=0) throw new ClassRuleException("You already recorded another class during these hours. The same teaching time cannot be counted twice.");
                     DataTable existing=Query(connection,transaction,"SELECT * FROM dbo.TeachingHourLogs WITH(UPDLOCK,HOLDLOCK) WHERE ClassId=@class AND SessionStartLocal=@start",
                         Id("@class",classId),new SqlParameter("@start",SqlDbType.DateTime2){Value=start});
                     if(existing.Rows.Count!=0)

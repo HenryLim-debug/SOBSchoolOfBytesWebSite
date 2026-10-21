@@ -20,6 +20,9 @@
             <a runat="server" href="~/StudentManagement" class="btn btn-outline-primary">Manage Students</a>
             <a runat="server" href="~/ClassManagement" class="btn btn-outline-primary">Manage Classes</a>
             <a runat="server" href="~/ReviewTeachingHours" class="btn btn-outline-primary">Review Teaching Hours</a>
+            <a runat="server" href="~/SalaryManagement" class="btn btn-outline-primary">Teacher Salaries</a>
+        <a runat="server" href="~/Attendance" class="btn btn-outline-primary">Review Attendance</a>
+        <a runat="server" href="~/LearningProgress" class="btn btn-outline-primary">Review Learning Progress</a>
         </div>
         <section class="mt-4" aria-labelledby="pendingTitle">
             <h2 id="pendingTitle">Student Approval</h2>

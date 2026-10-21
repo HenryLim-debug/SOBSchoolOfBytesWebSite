@@ -12,6 +12,10 @@
             <a runat="server" href="~/TeacherMaterials" class="btn btn-outline-primary">Manage Teaching Materials</a>
             <a runat="server" href="~/TeacherSubmissions" class="btn btn-outline-primary">Review Student Work</a>
             <a runat="server" href="~/TeachingHours" class="btn btn-outline-primary">My Teaching Hours</a>
+            <a runat="server" href="~/TeacherSalary" class="btn btn-outline-primary">My Salary</a>
+            <a runat="server" href="~/ClassMeetings" class="btn btn-outline-primary">Class Meeting Links</a>
+        <a runat="server" href="~/Attendance" class="btn btn-outline-primary">Record Attendance</a>
+        <a runat="server" href="~/LearningProgress" class="btn btn-outline-primary">Review Learning Progress</a>
         </p>
         <section class="card p-4 mt-3" aria-labelledby="teacherAccountTitle">
             <h2 id="teacherAccountTitle" class="h4">Your Account</h2>
@@ -47,6 +51,7 @@
                     <asp:BoundField DataField="WeeklySchedule" HeaderText="Weekly sessions" HtmlEncode="true" />
                     <asp:BoundField DataField="CourseDates" HeaderText="Course dates" HtmlEncode="true" />
                     <asp:BoundField DataField="Places" HeaderText="Places" HtmlEncode="true" />
+                        <asp:TemplateField HeaderText="Online class"><ItemTemplate><a class="btn btn-outline-primary btn-sm" href='<%# ResolveUrl("~/ClassMeetings?id=" + Eval("ClassId")) %>'>Meeting Link</a></ItemTemplate></asp:TemplateField>
                         <asp:TemplateField HeaderText="Students"><ItemTemplate><a class="btn btn-outline-primary btn-sm" href='<%# ResolveUrl("~/ClassRoster?id=" + Eval("ClassId")) %>'>View Students</a></ItemTemplate></asp:TemplateField>
                     </Columns>
                 </asp:GridView>

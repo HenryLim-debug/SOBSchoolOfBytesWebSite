@@ -157,7 +157,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
         }
         public static DataTable MyEnrolments(int studentId)
         {
-            return Display(Query(ClassSelect.Replace("SELECT cl.*", "SELECT own.EnrolmentId,cl.*") + @"JOIN dbo.CourseEnrolments own ON own.ClassId=cl.ClassId
+            return Display(Query(ClassSelect.Replace("SELECT cl.*", "SELECT own.EnrolmentId,CAST(CASE WHEN EXISTS(SELECT 1 FROM dbo.ClassMeetingLinks ml WHERE ml.ClassId=cl.ClassId AND ml.MeetingUrl IS NOT NULL) THEN 1 ELSE 0 END AS BIT) AS HasMeetingLink,cl.*") + @"JOIN dbo.CourseEnrolments own ON own.ClassId=cl.ClassId
                 WHERE own.StudentId=@student AND own.IsActive=1 ORDER BY cl.FirstMonday,cl.ClassId", Int("@student", studentId)));
         }
         public static DataTable MyTeachingClasses(int teacherId)

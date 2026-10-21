@@ -52,9 +52,29 @@ namespace SOBSchoolOfBytesWebSite
                     WatchVideo.NavigateUrl="https://www.youtube.com/watch?v="+videoId;
                 }
                 LessonPanel.Visible=true;
+                bool completed=ProgressService.IsCompleted(CurrentAccount.Id,chapterId);
+                CompletionStatus.Text=completed ? "You have marked this chapter complete." : "You have not marked this chapter complete yet.";
+                CompleteButton.Visible=!completed; UndoCompleteButton.Visible=completed;
             }
             catch(ClassRuleException ex) { FeedbackPanel.Visible=true; FeedbackMessage.Text=ex.Message; }
             catch(SqlException ex) { CoursePanel.Visible=false; Trace.Warn("CourseLearning","Could not load learning materials.",ex); FeedbackPanel.Visible=true; FeedbackMessage.Text="Learning materials could not be loaded. Please try again later."; }
+        }
+        protected void Completion_Command(object sender,System.Web.UI.WebControls.CommandEventArgs e)
+        {
+            try
+            {
+                int courseId,chapterId;
+                if(!int.TryParse(Request.QueryString["course"],out courseId) || !int.TryParse(Request.QueryString["chapter"],out chapterId))
+                    throw new ClassRuleException("Reopen the chapter from your dashboard.");
+                string action=Convert.ToString(e.CommandArgument);
+                if(action!="complete" && action!="undo") throw new ClassRuleException("Reopen the chapter before changing progress.");
+                MaterialService.StudentChapter(CurrentAccount.Id,courseId,chapterId);
+                ProgressService.SetCompleted(CurrentAccount.Id,chapterId,action=="complete");
+                Response.Redirect(ResolveUrl("~/CourseLearning?course="+courseId+"&chapter="+chapterId+"#lesson"),false);
+                Context.ApplicationInstance.CompleteRequest();
+            }
+            catch(ClassRuleException ex) { FeedbackPanel.Visible=true; FeedbackMessage.Text=ex.Message; }
+            catch(SqlException ex) { Trace.Warn("CourseLearning","Could not update progress.",ex); FeedbackPanel.Visible=true; FeedbackMessage.Text="Progress could not be saved. Please reload the lesson and try again."; }
         }
     }
 }

@@ -19,3 +19,49 @@ textarea {
         padding: 0;
     }
 }
+
+/* Public information pages; existing learning and management forms keep their layout. */
+.sob-info { color: #203047; }
+.sob-info p { line-height: 1.7; }
+.sob-info-hero {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid #d8e3f1;
+    border-radius: 1rem;
+    background: #f0f6ff;
+}
+.sob-info-hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #e26072, #edac43, #77ad69, #419bb5, #8073bd);
+}
+.sob-info-hero h1 { max-width: 24ch; font-weight: 700; }
+.sob-info-eyebrow { color: #37567d; font-weight: 700; margin-bottom: .75rem; }
+.sob-info-card { padding: 1.5rem; border: 1px solid #d8e3f1; border-radius: .85rem; background: #fff; }
+.sob-info-card p:last-child { margin-bottom: 0; }
+.sob-info-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    background: #e8efff;
+    color: #254b87;
+    font-weight: 700;
+}
+.sob-info-band { padding: 1.5rem; border-radius: .85rem; background: #f0f7f3; }
+.sob-info li { line-height: 1.7; margin-bottom: .6rem; }
+.sob-info-steps { padding-left: 1.4rem; }
+.sob-info-contact { font-style: normal; overflow-wrap: anywhere; }
+.sob-info-faq { margin-bottom: .75rem; border: 1px solid #d8e3f1; border-radius: .65rem; }
+.sob-info-faq summary { padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; }
+.sob-info-faq[open] summary { background: #f0f6ff; border-radius: .65rem .65rem 0 0; }
+.sob-info-faq p { padding: 1rem 1.25rem; margin: 0; }
+.sob-info a:focus-visible, .sob-info summary:focus-visible { outline: 3px solid #234c8a; outline-offset: 3px; }
