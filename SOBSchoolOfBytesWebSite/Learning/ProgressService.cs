@@ -8,7 +8,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
     public static class ProgressService
     {
         private static string ConnectionString { get { return ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString; } }
-        private const string Access = @"e.IsActive=1 AND c.IsAvailable=1 AND EXISTS(SELECT 1 FROM dbo.userTable actor WHERE actor.Id=@actor AND
+        private const string Access = @"e.IsActive=1 AND EXISTS(SELECT 1 FROM dbo.userTable actor WHERE actor.Id=@actor AND
             ((actor.usertype=N'Student' AND actor.accountStatus=N'Approved' AND e.StudentId=actor.Id)
             OR (actor.usertype=N'Teacher' AND actor.accountStatus=N'Active' AND cl.TeacherId=actor.Id
                 AND EXISTS(SELECT 1 FROM dbo.TeacherCourses tc WHERE tc.TeacherId=actor.Id AND tc.CourseId=e.CourseId))
@@ -35,7 +35,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
             JOIN dbo.Courses c WITH(HOLDLOCK) ON c.CourseId=e.CourseId
             JOIN dbo.CourseChapters ch WITH(HOLDLOCK) ON ch.CourseId=e.CourseId
             JOIN dbo.userTable s WITH(HOLDLOCK) ON s.Id=e.StudentId
-            WHERE e.StudentId=@actor AND e.IsActive=1 AND c.IsAvailable=1 AND ch.ChapterId=@chapter AND ch.IsPublished=1
+            WHERE e.StudentId=@actor AND e.IsActive=1 AND ch.ChapterId=@chapter AND ch.IsPublished=1
                 AND s.usertype=N'Student' AND s.accountStatus=N'Approved'";
         private const string SetSql = @"IF @complete=1
             BEGIN

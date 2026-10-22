@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Student Login" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="StudentLogin.aspx.cs" Inherits="SOBSchoolOfBytesWebSite.StudentLogin" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <main class="row justify-content-center py-4" aria-labelledby="loginTitle">
+    <main class="row justify-content-center py-4 sob-auth" aria-labelledby="loginTitle">
         <div class="col-lg-6">
             <h1 id="loginTitle">Student Login</h1>
             <p class="lead">Welcome back! Sign in to your School of Bytes account.</p>
@@ -31,5 +31,6 @@
                 <p class="form-text mb-0">Your account needs the president's approval before you can sign in.</p>
             </div>
         </div>
+        <p class="text-center mt-3"><a runat="server" href="~/ForgotPassword?role=student">Forgot password?</a></p>
     </main>
 </asp:Content>

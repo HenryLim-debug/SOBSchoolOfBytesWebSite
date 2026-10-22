@@ -69,6 +69,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
         private static string ConnectionString { get { return ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString; } }
         private const string ClassSelect = @"SELECT cl.*,c.Title AS CourseTitle,c.Description,
             u.fname + N' ' + u.lname AS TeacherName,u.accountStatus AS TeacherStatus,c.IsAvailable,
+            (SELECT MAX(DATEADD(HOUR,8,h.ChangedAtUtc)) FROM dbo.ClassChangeHistory h WHERE h.ClassId=cl.ClassId) AS LastChangedAt,
             (SELECT COUNT(*) FROM dbo.CourseEnrolments e WHERE e.ClassId=cl.ClassId AND e.IsActive=1) AS Seats
             FROM dbo.CourseClasses cl JOIN dbo.Courses c ON c.CourseId=cl.CourseId JOIN dbo.userTable u ON u.Id=cl.TeacherId ";
         private const string StaffPermission = @" EXISTS(SELECT 1 FROM dbo.userTable actor WHERE actor.Id=@actor

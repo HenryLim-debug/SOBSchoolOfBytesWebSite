@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 
 namespace SOBSchoolOfBytesWebSite.Security
 {
@@ -7,6 +8,7 @@ namespace SOBSchoolOfBytesWebSite.Security
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string Username { get; set; }
+        public Guid SecurityStamp { get; set; }
     }
 
     // The student pages use the same session and protected cookie as the staff pages.
@@ -17,7 +19,7 @@ namespace SOBSchoolOfBytesWebSite.Security
         {
             AccountAccess.SignIn(context, new UserAccount
             {
-                Id = student.Id, FirstName = student.FirstName, Username = student.Username, Role = "Student"
+                Id = student.Id, FirstName = student.FirstName, Username = student.Username, Role = "Student", SecurityStamp = student.SecurityStamp
             });
         }
         public static void ClearSignIn(HttpContext context) { AccountAccess.ClearSignIn(context); }

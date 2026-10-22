@@ -60,6 +60,7 @@
                     <asp:BoundField DataField="Places" HeaderText="Places" HtmlEncode="true" />
                     <asp:BoundField DataField="EnrolmentState" HeaderText="Enrolment" HtmlEncode="true" />
                     <asp:TemplateField HeaderText="Actions"><ItemTemplate>
+                        <a class="btn btn-outline-primary btn-sm mb-2" href='<%# ResolveUrl("~/ClassEdit?id=" + Eval("ClassId")) %>'>Edit Class</a>
                         <a class="btn btn-outline-primary btn-sm mb-2" href='<%# ResolveUrl("~/ClassRoster?id=" + Eval("ClassId")) %>'>View Students</a>
                         <a class="btn btn-outline-primary btn-sm mb-2" href='<%# ResolveUrl("~/ClassMeetings?id=" + Eval("ClassId")) %>'>Meeting Link</a>
                         <asp:Button ID="ToggleButton" runat="server" CssClass="btn btn-outline-secondary btn-sm" CommandName="ToggleClass" CausesValidation="false" />

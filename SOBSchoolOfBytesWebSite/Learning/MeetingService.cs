@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -16,7 +16,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
             JOIN dbo.userTable a ON a.Id=e.StudentId JOIN dbo.Courses co ON co.CourseId=e.CourseId
             JOIN dbo.userTable t ON t.Id=cl.TeacherId
             WHERE e.ClassId=cl.ClassId AND e.StudentId=@actor AND e.IsActive=1
-            AND a.usertype=N'Student' AND a.accountStatus=N'Approved' AND co.IsAvailable=1
+            AND a.usertype=N'Student' AND a.accountStatus=N'Approved'
             AND t.usertype=N'Teacher' AND t.accountStatus=N'Active'
             AND EXISTS(SELECT 1 FROM dbo.TeacherCourses tc WHERE tc.TeacherId=t.Id AND tc.CourseId=cl.CourseId))";
         private static SqlParameter Id(string name,int value) { return new SqlParameter(name,SqlDbType.Int){Value=value}; }

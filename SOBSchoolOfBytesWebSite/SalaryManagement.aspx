@@ -3,6 +3,7 @@
 <main class="py-4">
     <a runat="server" href="~/PresidentDashboard" class="btn btn-outline-secondary mb-3">Back to Dashboard</a>
     <h1>Teacher Salaries</h1>
+    <a runat="server" href="~/Payslips" class="btn btn-outline-primary mb-3">Issue / View Payslips</a>
     <p>Calculated salary = approved teaching hours × the hourly rate set for that month. All amounts are in Malaysian Ringgit (RM).</p>
     <p>Pending and rejected hours are excluded. Current-month earnings grow as hours are approved. Past months also update if a late approval or rate correction is made. These are gross teaching earnings before deductions; they do not confirm a payment.</p>
     <asp:Panel ID="MessagePanel" runat="server" Visible="false" CssClass="alert alert-warning" role="status"><asp:Literal ID="MessageText" runat="server" Mode="Encode" /></asp:Panel>

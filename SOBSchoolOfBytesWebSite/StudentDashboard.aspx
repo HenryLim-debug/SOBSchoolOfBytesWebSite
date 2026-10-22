@@ -1,8 +1,8 @@
 ﻿<%@ Page Title="Student Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="StudentDashboard.aspx.cs" Inherits="SOBSchoolOfBytesWebSite.StudentDashboard" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <main class="py-4" aria-labelledby="dashboardTitle">
-        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+    <main class="py-4 sob-dashboard" aria-labelledby="dashboardTitle">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 sob-dashboard-welcome">
             <div>
                 <h1 id="dashboardTitle">Student Dashboard</h1>
                 <p class="lead">Welcome, <asp:Literal ID="StudentName" runat="server" Mode="Encode" />!</p>
@@ -14,9 +14,11 @@
         <p>Signed in as <strong><asp:Literal ID="StudentUsername" runat="server" Mode="Encode" /></strong>.</p>
         <h2>Explore your learning options</h2>
         <p>Discover computer fundamentals, internet safety, office applications and beginner Python.</p>
+        <nav class="sob-dashboard-actions" aria-label="Student shortcuts">
         <a class="btn btn-primary" runat="server" href="~/Courses">Browse Our Courses</a>
         <a runat="server" href="~/StudentAttendance" class="btn btn-outline-primary">My Attendance</a>
         <a runat="server" href="~/LearningProgress" class="btn btn-outline-primary">My Learning Progress</a>
+        </nav>
 
         <asp:Panel ID="FeedbackPanel" runat="server" Visible="false" role="status"><asp:Literal ID="FeedbackMessage" runat="server" Mode="Encode" /></asp:Panel>
         <section class="mt-4" aria-labelledby="myApplicationsTitle">
@@ -58,6 +60,7 @@
                     <asp:BoundField DataField="CourseTitle" HeaderText="Course" HtmlEncode="true" />
                     <asp:BoundField DataField="ClassName" HeaderText="Class" HtmlEncode="true" />
                     <asp:BoundField DataField="TeacherName" HeaderText="Teacher" HtmlEncode="true" />
+                    <asp:BoundField DataField="LastChangedAt" HeaderText="Class last changed (Malaysia)" DataFormatString="{0:dd MMM yyyy HH:mm}" HtmlEncode="true" NullDisplayText="No changes" />
                     <asp:BoundField DataField="WeeklySchedule" HeaderText="Weekly sessions" HtmlEncode="true" />
                     <asp:BoundField DataField="CourseDates" HeaderText="Course dates" HtmlEncode="true" />
                         <asp:TemplateField HeaderText="Online class"><ItemTemplate>
@@ -75,5 +78,6 @@
                 </asp:GridView>
             </div>
         </section>
+        <p class="mt-4"><a runat="server" href="~/RecoverySettings" class="btn btn-outline-primary">My Recovery Code</a></p>
     </main>
 </asp:Content>

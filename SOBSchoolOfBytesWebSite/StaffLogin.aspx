@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Staff Login" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="StaffLogin.aspx.cs" Inherits="SOBSchoolOfBytesWebSite.StaffLogin" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <main class="row justify-content-center py-4" aria-labelledby="staffLoginTitle">
+    <main class="row justify-content-center py-4 sob-auth" aria-labelledby="staffLoginTitle">
         <div class="col-lg-6">
             <h1 id="staffLoginTitle">Teacher and President Login</h1>
             <p class="lead">Enter your staff account details to continue.</p>
@@ -33,5 +33,6 @@
                 <p class="mt-3 mb-0"><a runat="server" href="~/StudentLogin">Go to Student Login</a></p>
             </div>
         </div>
+        <p class="text-center mt-3"><a runat="server" href="~/ForgotPassword?role=staff">Forgot password?</a></p>
     </main>
 </asp:Content>

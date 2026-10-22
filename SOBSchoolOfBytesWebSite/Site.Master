@@ -13,10 +13,12 @@
     </asp:PlaceHolder>
 
     <webopt:bundlereference runat="server" path="~/Content/css" />
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link runat="server" href="~/Content/sob-theme.css?v=20261022" rel="stylesheet" />
+    <link runat="server" href="~/Images/sob-icon.svg" rel="icon" type="image/svg+xml" />
 
 </head>
-<body>
+<body class="sob-site">
+    <a class="sob-skip-link" href="#main-content">Skip to main content</a>
     <form runat="server">
         <asp:ScriptManager runat="server">
             <Scripts>
@@ -37,32 +39,37 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-light sob-navbar" aria-label="Main navigation">
             <div class="container">
-                <a class="navbar-brand" runat="server" href="~/">SOB School of Bytes</a>
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                <a class="navbar-brand sob-brand" runat="server" href="~/" aria-label="SOB School of Bytes home"><img runat="server" src="~/Images/sob-logo.png" alt="SOB School of Bytes" width="194" height="94" /></a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#sobNavigation" title="Toggle navigation" aria-controls="sobNavigation"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/About">About</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/StudentRegistration">Student Registration</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Login">Login</a></li>
+                <div id="sobNavigation" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+                        <li class="nav-item"><a ID="HomeNav" class="nav-link" runat="server" href="~/">Home</a></li>
+                        <li class="nav-item"><a ID="CoursesNav" class="nav-link" runat="server" href="~/CourseCatalogue">Courses</a></li>
+                        <li class="nav-item"><a ID="AboutNav" class="nav-link" runat="server" href="~/About">About</a></li>
+                        <li class="nav-item"><a ID="ContactNav" class="nav-link" runat="server" href="~/Contact">Contact</a></li>
+                        <li ID="RegisterNavItem" class="nav-item" runat="server"><a ID="RegisterNav" class="nav-link" runat="server" href="~/StudentRegistration">Register</a></li>
+                        <li ID="LoginNavItem" class="nav-item" runat="server"><a ID="LoginNav" class="nav-link sob-nav-action" runat="server" href="~/Login">Login</a></li>
+                        <li ID="DashboardNavItem" class="nav-item" runat="server" Visible="false"><a ID="DashboardNav" class="nav-link sob-nav-action" runat="server">My Dashboard</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
-        <div class="container body-content">
+        <div id="main-content" class="container body-content" tabindex="-1">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
-            <hr />
-            <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - SOB School of Bytes</p>
-            </footer>
         </div>
+        <footer class="sob-footer">
+            <div class="container sob-footer-inner">
+                <div><strong>SOB School of Bytes</strong><p class="mb-0">Discover. Create. Learn together.</p></div>
+                <nav aria-label="Footer navigation"><a runat="server" href="~/CourseCatalogue">Courses</a><a runat="server" href="~/About">About</a><a runat="server" href="~/Contact">Contact</a></nav>
+                <small>&copy; <%: DateTime.UtcNow.AddHours(8).Year %> SOB School of Bytes</small>
+            </div>
+        </footer>
     </form>
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/Scripts/bootstrap.js") %>

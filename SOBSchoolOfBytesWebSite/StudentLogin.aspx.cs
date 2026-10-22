@@ -68,7 +68,7 @@ namespace SOBSchoolOfBytesWebSite
                 string accountStatus;
                 using (SqlConnection connection = new SqlConnection(
                     ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
-                using (SqlCommand command = new SqlCommand(@"SELECT Id, fname, username, [password], accountStatus
+                using (SqlCommand command = new SqlCommand(@"SELECT Id, fname, username, [password], accountStatus, SecurityStamp
                     FROM dbo.userTable WHERE username = @username AND usertype = N'Student'", connection))
                 {
                     command.Parameters.Add("@username", SqlDbType.NVarChar, 50).Value = username.Text;
@@ -84,7 +84,8 @@ namespace SOBSchoolOfBytesWebSite
                         {
                             Id = (int)reader["Id"],
                             FirstName = reader["fname"].ToString(),
-                            Username = reader["username"].ToString()
+                            Username = reader["username"].ToString(),
+                            SecurityStamp = (Guid)reader["SecurityStamp"]
                         };
                         passwordHash = reader["password"].ToString();
                         accountStatus = reader["accountStatus"].ToString().Trim();

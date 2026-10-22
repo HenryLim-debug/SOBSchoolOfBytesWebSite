@@ -14,7 +14,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
         private const string TeacherPermission = @"EXISTS(SELECT 1 FROM dbo.TeacherCourses tc WITH(HOLDLOCK)
             JOIN dbo.userTable actor WITH(HOLDLOCK) ON actor.Id=tc.TeacherId
             WHERE tc.CourseId=c.CourseId AND tc.TeacherId=@actor AND actor.usertype=N'Teacher' AND actor.accountStatus=N'Active')";
-        private const string StudentPermission = @"c.IsAvailable=1 AND EXISTS(SELECT 1 FROM dbo.CourseEnrolments e
+        private const string StudentPermission = @"EXISTS(SELECT 1 FROM dbo.CourseEnrolments e
             JOIN dbo.userTable actor ON actor.Id=e.StudentId WHERE e.CourseId=c.CourseId AND e.StudentId=@actor
             AND e.IsActive=1 AND actor.usertype=N'Student' AND actor.accountStatus=N'Approved')";
         private static SqlParameter Id(string name, int value) { return new SqlParameter(name,SqlDbType.Int){Value=value}; }

@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Student Registration" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="StudentRegistration.aspx.cs" Inherits="SOBSchoolOfBytesWebSite.StudentRegistration" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <main class="row justify-content-center py-4" aria-labelledby="registrationTitle">
+    <main class="row justify-content-center py-4 sob-auth" aria-labelledby="registrationTitle">
         <div class="col-lg-8">
             <h1 id="registrationTitle">Student Registration</h1>
             <p class="lead">Create your account and get ready to explore computers and Python.</p>

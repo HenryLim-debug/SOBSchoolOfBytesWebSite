@@ -22,5 +22,15 @@ namespace SOBSchoolOfBytesWebSite
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor HomeNav;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor CoursesNav;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor AboutNav;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor ContactNav;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor RegisterNav;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor LoginNav;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor DashboardNav;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl RegisterNavItem;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LoginNavItem;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DashboardNavItem;
     }
 }

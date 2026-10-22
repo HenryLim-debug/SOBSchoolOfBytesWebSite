@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="President Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PresidentDashboard.aspx.cs" Inherits="SOBSchoolOfBytesWebSite.PresidentDashboard" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <main class="py-4" aria-labelledby="presidentTitle">
-        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+    <main class="py-4 sob-dashboard" aria-labelledby="presidentTitle">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 sob-dashboard-welcome">
             <div>
                 <h1 id="presidentTitle">President Dashboard</h1>
                 <p>Welcome, <asp:Literal ID="PresidentName" runat="server" Mode="Encode" />. Manage your school and review new student registrations here.</p>
@@ -9,21 +9,23 @@
             <asp:Button ID="SignOutButton" runat="server" Text="Sign Out" CssClass="btn btn-outline-secondary"
                 CausesValidation="false" OnClick="SignOutButton_Click" />
         </div>
-        <div class="row g-3 my-2">
+        <div class="row g-3 my-2 sob-stats">
             <div class="col-sm-6 col-lg-3"><div class="card p-3"><h2 class="h6">Total students</h2><asp:Literal ID="StudentCount" runat="server" Mode="Encode" /></div></div>
             <div class="col-sm-6 col-lg-3"><div class="card p-3"><h2 class="h6">Pending approval</h2><asp:Literal ID="PendingCount" runat="server" Mode="Encode" /></div></div>
             <div class="col-sm-6 col-lg-3"><div class="card p-3"><h2 class="h6">Approved students</h2><asp:Literal ID="ApprovedCount" runat="server" Mode="Encode" /></div></div>
             <div class="col-sm-6 col-lg-3"><div class="card p-3"><h2 class="h6">Active teachers</h2><asp:Literal ID="TeacherCount" runat="server" Mode="Encode" /></div></div>
         </div>
-        <div class="d-flex flex-wrap gap-2 mt-4">
+        <nav class="sob-dashboard-actions" aria-label="President shortcuts">
             <a runat="server" href="~/TeacherManagement" class="btn btn-primary">Manage Teachers</a>
             <a runat="server" href="~/StudentManagement" class="btn btn-outline-primary">Manage Students</a>
+            <a runat="server" href="~/CourseManagement" class="btn btn-outline-primary">Manage Courses</a>
             <a runat="server" href="~/ClassManagement" class="btn btn-outline-primary">Manage Classes</a>
             <a runat="server" href="~/ReviewTeachingHours" class="btn btn-outline-primary">Review Teaching Hours</a>
             <a runat="server" href="~/SalaryManagement" class="btn btn-outline-primary">Teacher Salaries</a>
+    <a runat="server" href="~/Payslips" class="btn btn-outline-primary mb-3">Issue / View Payslips</a>
         <a runat="server" href="~/Attendance" class="btn btn-outline-primary">Review Attendance</a>
         <a runat="server" href="~/LearningProgress" class="btn btn-outline-primary">Review Learning Progress</a>
-        </div>
+        </nav>
         <section class="mt-4" aria-labelledby="pendingTitle">
             <h2 id="pendingTitle">Student Approval</h2>
             <p>Approve a registration to allow the student to sign in, or reject it to keep the account unavailable.</p>
@@ -54,5 +56,6 @@
                 </asp:GridView>
             </div>
         </section>
+        <p class="mt-4"><a runat="server" href="~/RecoverySettings" class="btn btn-outline-primary">My Recovery Code</a></p>
     </main>
 </asp:Content>

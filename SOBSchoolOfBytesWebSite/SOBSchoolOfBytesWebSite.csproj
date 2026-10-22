@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -553,6 +553,87 @@
     </Compile>
     <Compile Include="LearningProgress.aspx.designer.cs">
       <DependentUpon>LearningProgress.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Database\013_TeacherPayslips.sql" />
+    <Compile Include="Learning\PayslipService.cs" />
+    <Content Include="Payslip.aspx" />
+    <Compile Include="Payslip.aspx.cs">
+      <DependentUpon>Payslip.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Payslip.aspx.designer.cs">
+      <DependentUpon>Payslip.aspx</DependentUpon>
+    </Compile>
+    <Content Include="Payslips.aspx" />
+    <Compile Include="Payslips.aspx.cs">
+      <DependentUpon>Payslips.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Payslips.aspx.designer.cs">
+      <DependentUpon>Payslips.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\sob-theme.css" />
+    <Content Include="Images\sob-logo.png" />
+    <Content Include="Images\sob-icon.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Security\RecoveryService.cs" />
+    <Content Include="Database\014_PasswordRecovery.sql" />
+    <Content Include="RecoverySettings.aspx" />
+    <Compile Include="RecoverySettings.aspx.cs">
+      <DependentUpon>RecoverySettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RecoverySettings.aspx.designer.cs">
+      <DependentUpon>RecoverySettings.aspx</DependentUpon>
+    </Compile>
+    <Content Include="ForgotPassword.aspx" />
+    <Compile Include="ForgotPassword.aspx.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ForgotPassword.aspx.designer.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Learning\CourseManagementService.cs" />
+    <Content Include="Database\015_CourseManagement.sql" />
+    <Content Include="CourseManagement.aspx" />
+    <Compile Include="CourseManagement.aspx.cs">
+      <DependentUpon>CourseManagement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CourseManagement.aspx.designer.cs">
+      <DependentUpon>CourseManagement.aspx</DependentUpon>
+    </Compile>
+    <Content Include="CourseCatalogue.aspx" />
+    <Compile Include="CourseCatalogue.aspx.cs">
+      <DependentUpon>CourseCatalogue.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CourseCatalogue.aspx.designer.cs">
+      <DependentUpon>CourseCatalogue.aspx</DependentUpon>
+    </Compile>
+    <Content Include="CoursePreview.aspx" />
+    <Compile Include="CoursePreview.aspx.cs">
+      <DependentUpon>CoursePreview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CoursePreview.aspx.designer.cs">
+      <DependentUpon>CoursePreview.aspx</DependentUpon>
+    </Compile>
+    <Content Include="ClassEdit.aspx" />
+    <Compile Include="ClassEdit.aspx.cs">
+      <DependentUpon>ClassEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClassEdit.aspx.designer.cs">
+      <DependentUpon>ClassEdit.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

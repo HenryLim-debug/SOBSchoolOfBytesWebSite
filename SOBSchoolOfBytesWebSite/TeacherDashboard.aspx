@@ -1,22 +1,23 @@
 ﻿<%@ Page Title="Teacher Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TeacherDashboard.aspx.cs" Inherits="SOBSchoolOfBytesWebSite.TeacherDashboard" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <main class="py-4" aria-labelledby="teacherTitle">
-        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+    <main class="py-4 sob-dashboard" aria-labelledby="teacherTitle">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 sob-dashboard-welcome">
             <div><h1 id="teacherTitle">Teacher Dashboard</h1>
                 <p>Welcome, <asp:Literal ID="TeacherName" runat="server" Mode="Encode" />.</p></div>
             <asp:Button ID="SignOutButton" runat="server" Text="Sign Out" CssClass="btn btn-outline-secondary"
                 CausesValidation="false" OnClick="SignOutButton_Click" />
         </div>
-        <p class="mt-3 d-flex flex-wrap gap-2">
+        <nav class="sob-dashboard-actions" aria-label="Teacher shortcuts">
             <a runat="server" href="~/CourseApplications" class="btn btn-primary">Review Course Applications</a>
             <a runat="server" href="~/TeacherMaterials" class="btn btn-outline-primary">Manage Teaching Materials</a>
             <a runat="server" href="~/TeacherSubmissions" class="btn btn-outline-primary">Review Student Work</a>
             <a runat="server" href="~/TeachingHours" class="btn btn-outline-primary">My Teaching Hours</a>
             <a runat="server" href="~/TeacherSalary" class="btn btn-outline-primary">My Salary</a>
+    <a runat="server" href="~/Payslips" class="btn btn-outline-primary mb-3">My Payslips</a>
             <a runat="server" href="~/ClassMeetings" class="btn btn-outline-primary">Class Meeting Links</a>
         <a runat="server" href="~/Attendance" class="btn btn-outline-primary">Record Attendance</a>
         <a runat="server" href="~/LearningProgress" class="btn btn-outline-primary">Review Learning Progress</a>
-        </p>
+        </nav>
         <section class="card p-4 mt-3" aria-labelledby="teacherAccountTitle">
             <h2 id="teacherAccountTitle" class="h4">Your Account</h2>
             <p>Username: <asp:Literal ID="TeacherUsername" runat="server" Mode="Encode" /></p>
@@ -57,5 +58,6 @@
                 </asp:GridView>
             </div>
         </section>
+        <p class="mt-4"><a runat="server" href="~/RecoverySettings" class="btn btn-outline-primary">My Recovery Code</a></p>
     </main>
 </asp:Content>

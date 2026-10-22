@@ -60,7 +60,7 @@ namespace SOBSchoolOfBytesWebSite
                 string hash, status;
                 using (SqlConnection connection = new SqlConnection(
                     ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
-                using (SqlCommand command = new SqlCommand(@"SELECT Id, fname, username, usertype, staffId, [password], accountStatus
+                using (SqlCommand command = new SqlCommand(@"SELECT Id, fname, username, usertype, staffId, [password], accountStatus, SecurityStamp
                     FROM dbo.userTable WHERE username = @username AND usertype IN (N'Teacher', N'President')", connection))
                 {
                     command.Parameters.Add("@username", SqlDbType.NVarChar, 50).Value = username.Text;
@@ -69,7 +69,8 @@ namespace SOBSchoolOfBytesWebSite
                     {
                         if (!reader.Read()) { ShowError("Username, staff ID or password is incorrect."); return; }
                         account = new UserAccount { Id = (int)reader["Id"], FirstName = reader["fname"].ToString(),
-                            Username = reader["username"].ToString(), Role = reader["usertype"].ToString(), StaffId = reader["staffId"].ToString() };
+                            Username = reader["username"].ToString(), Role = reader["usertype"].ToString(), StaffId = reader["staffId"].ToString(),
+                            SecurityStamp = (Guid)reader["SecurityStamp"] };
                         hash = reader["password"].ToString();
                         status = reader["accountStatus"].ToString();
                     }

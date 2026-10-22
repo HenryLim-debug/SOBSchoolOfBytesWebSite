@@ -1,0 +1,23 @@
+﻿SET XACT_ABORT ON;
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
+SET ANSI_PADDING ON;
+SET ANSI_WARNINGS ON;
+SET ARITHABORT ON;
+SET CONCAT_NULL_YIELDS_NULL ON;
+SET NUMERIC_ROUNDABORT OFF;
+BEGIN TRANSACTION;
+IF COL_LENGTH('dbo.userTable','SecurityStamp') IS NULL
+    ALTER TABLE dbo.userTable ADD SecurityStamp UNIQUEIDENTIFIER NOT NULL CONSTRAINT DF_userTable_SecurityStamp DEFAULT NEWID() WITH VALUES;
+IF COL_LENGTH('dbo.userTable','RecoveryCodeHash') IS NULL
+    ALTER TABLE dbo.userTable ADD RecoveryCodeHash CHAR(64) NULL, RecoveryCodeCreatedAt DATETIME2(0) NULL, RecoveryEmail NVARCHAR(254) NULL;
+IF OBJECT_ID('dbo.RecoveryRequestLimits','U') IS NULL
+BEGIN
+    CREATE TABLE dbo.RecoveryRequestLimits(
+        BucketHash CHAR(64) NOT NULL CONSTRAINT PK_RecoveryRequestLimits PRIMARY KEY,
+        WindowStartUtc DATETIME2(0) NOT NULL,
+        AttemptCount INT NOT NULL,
+        CONSTRAINT CK_RecoveryRequestLimits_Count CHECK(AttemptCount>0)
+    );
+END;
+COMMIT TRANSACTION;

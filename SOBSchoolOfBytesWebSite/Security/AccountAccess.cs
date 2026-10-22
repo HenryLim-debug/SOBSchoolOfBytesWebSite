@@ -16,6 +16,7 @@ namespace SOBSchoolOfBytesWebSite.Security
         public string Username { get; set; }
         public string Role { get; set; }
         public string StaffId { get; set; }
+        public Guid SecurityStamp { get; set; }
     }
 
     public static class AccountAccess
@@ -38,7 +39,7 @@ namespace SOBSchoolOfBytesWebSite.Security
             // Recheck role and status on every protected request, so revoked access takes effect immediately.
             using (SqlConnection connection = new SqlConnection(
                 ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
-            using (SqlCommand command = new SqlCommand(@"SELECT Id, fname, username, usertype, staffId
+            using (SqlCommand command = new SqlCommand(@"SELECT Id, fname, username, usertype, staffId, SecurityStamp
                 FROM dbo.userTable WHERE Id = @id AND
                 ((usertype = N'Student' AND accountStatus = N'Approved') OR
                  (usertype IN (N'Teacher', N'President') AND accountStatus = N'Active'))", connection))
@@ -50,11 +51,16 @@ namespace SOBSchoolOfBytesWebSite.Security
                     if (!reader.Read() || !string.Equals(reader["usertype"].ToString(),
                         context.Session["UserType"] as string, StringComparison.Ordinal))
                         return null;
+                    // A reset makes sessions issued with the previous stamp invalid.
+                    if (!(context.Session["SecurityStamp"] is Guid)
+                        || (Guid)context.Session["SecurityStamp"] != (Guid)reader["SecurityStamp"])
+                        return null;
                     return new UserAccount
                     {
                         Id = (int)reader["Id"], FirstName = reader["fname"].ToString(),
                         Username = reader["username"].ToString(), Role = reader["usertype"].ToString(),
-                        StaffId = reader["staffId"] == DBNull.Value ? null : reader["staffId"].ToString()
+                        StaffId = reader["staffId"] == DBNull.Value ? null : reader["staffId"].ToString(),
+                        SecurityStamp = (Guid)reader["SecurityStamp"]
                     };
                 }
             }
@@ -73,6 +79,8 @@ namespace SOBSchoolOfBytesWebSite.Security
 
         public static void SignIn(HttpContext context, UserAccount account)
         {
+            if (account.SecurityStamp == Guid.Empty) throw new ArgumentException("Missing sign-in security stamp.", "account");
+            context.Session["SecurityStamp"] = account.SecurityStamp;
             context.Session["UserId"] = account.Id;
             context.Session["UserType"] = account.Role;
             context.Session["FirstName"] = account.FirstName;
@@ -89,7 +97,7 @@ namespace SOBSchoolOfBytesWebSite.Security
         public static void ClearSignIn(HttpContext context)
         {
             FormsAuthentication.SignOut();
-            foreach (string key in new[] { "UserId", "UserType", "FirstName", "Username", "StaffId" })
+            foreach (string key in new[] { "UserId", "UserType", "FirstName", "Username", "StaffId", "SecurityStamp" })
                 context.Session.Remove(key);
         }
 

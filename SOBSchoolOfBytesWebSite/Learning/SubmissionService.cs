@@ -14,7 +14,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
             JOIN dbo.CourseEnrolments e ON e.EnrolmentId=s.EnrolmentId AND e.CourseId=s.CourseId
             JOIN dbo.CourseClasses cl ON cl.ClassId=e.ClassId
             JOIN dbo.userTable student ON student.Id=e.StudentId ";
-        private const string StudentPermission=@"e.StudentId=@actor AND e.IsActive=1 AND c.IsAvailable=1 AND ch.IsPublished=1
+        private const string StudentPermission=@"e.StudentId=@actor AND e.IsActive=1 AND ch.IsPublished=1
             AND student.usertype=N'Student' AND student.accountStatus=N'Approved'";
         private const string TeacherPermission=@"cl.TeacherId=@actor AND EXISTS(SELECT 1 FROM dbo.TeacherCourses tc WITH(HOLDLOCK)
             JOIN dbo.userTable teacher WITH(HOLDLOCK) ON teacher.Id=tc.TeacherId

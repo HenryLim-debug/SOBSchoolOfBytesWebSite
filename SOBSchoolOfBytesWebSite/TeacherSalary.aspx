@@ -3,6 +3,7 @@
 <main class="py-4">
     <a runat="server" href="~/TeacherDashboard" class="btn btn-outline-secondary mb-3">Back to Dashboard</a>
     <h1>My Salary</h1>
+    <a runat="server" href="~/Payslips" class="btn btn-outline-primary mb-3">My Payslips</a>
     <p>Calculated salary = approved teaching hours × the hourly rate set for that month. All amounts are in Malaysian Ringgit (RM).</p>
     <p>Pending and rejected hours are excluded. Current-month earnings grow as hours are approved. Past months also update if a late approval or rate correction is made. These are gross teaching earnings before deductions; they do not confirm a payment.</p>
     <p>You can view your own current and past months. Contact the president if your hourly rate is not set.</p>
