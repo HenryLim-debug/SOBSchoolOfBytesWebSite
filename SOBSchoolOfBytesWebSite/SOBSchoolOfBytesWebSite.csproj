@@ -603,6 +603,7 @@
   <ItemGroup>
     <Compile Include="Learning\CourseManagementService.cs" />
     <Content Include="Database\015_CourseManagement.sql" />
+    <Content Include="Database\017_TeacherChapterMaterials.sql" />
     <Content Include="CourseManagement.aspx" />
     <Compile Include="CourseManagement.aspx.cs">
       <DependentUpon>CourseManagement.aspx</DependentUpon>

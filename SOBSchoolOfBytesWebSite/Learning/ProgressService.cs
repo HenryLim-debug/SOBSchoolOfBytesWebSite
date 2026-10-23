@@ -22,7 +22,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
             CAST(100.0*SUM(CASE WHEN ch.IsPublished=1 AND cp.ChapterId IS NOT NULL THEN 1 ELSE 0 END)/NULLIF(COUNT(ch.ChapterId),0) AS DECIMAL(5,1)) AS CompletionPercent,
             SUM(CASE WHEN ch.IsPublished=1 AND latest.SubmissionId IS NOT NULL THEN 1 ELSE 0 END) AS SubmittedChapters,
             SUM(CASE WHEN ch.IsPublished=1 AND latest.Mark IS NOT NULL THEN 1 ELSE 0 END) AS MarkedChapters";
-        private const string ChapterJoins = @" LEFT JOIN dbo.CourseChapters ch ON ch.CourseId=e.CourseId
+        private const string ChapterJoins = @" LEFT JOIN dbo.TeacherChapterMaterials ch ON ch.CourseId=e.CourseId AND ch.TeacherId=cl.TeacherId
             LEFT JOIN dbo.ChapterCompletions cp ON cp.EnrolmentId=e.EnrolmentId AND cp.ChapterId=ch.ChapterId
             OUTER APPLY(SELECT TOP(1) a.SubmissionId,a.Mark FROM dbo.AssignmentSubmissions a
                 WHERE a.EnrolmentId=e.EnrolmentId AND a.ChapterId=ch.ChapterId ORDER BY a.SubmissionId DESC) latest ";
@@ -33,7 +33,8 @@ namespace SOBSchoolOfBytesWebSite.Learning
             latest.Mark";
         private const string EligibleSql = @"SELECT e.EnrolmentId,e.CourseId FROM dbo.CourseEnrolments e WITH(UPDLOCK,HOLDLOCK)
             JOIN dbo.Courses c WITH(HOLDLOCK) ON c.CourseId=e.CourseId
-            JOIN dbo.CourseChapters ch WITH(HOLDLOCK) ON ch.CourseId=e.CourseId
+            JOIN dbo.CourseClasses cl WITH(HOLDLOCK) ON cl.ClassId=e.ClassId
+            JOIN dbo.TeacherChapterMaterials ch WITH(HOLDLOCK) ON ch.CourseId=e.CourseId AND ch.TeacherId=cl.TeacherId
             JOIN dbo.userTable s WITH(HOLDLOCK) ON s.Id=e.StudentId
             WHERE e.StudentId=@actor AND e.IsActive=1 AND ch.ChapterId=@chapter AND ch.IsPublished=1
                 AND s.usertype=N'Student' AND s.accountStatus=N'Approved'";
@@ -59,7 +60,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
         {
             DataTable rows=Query(@"SELECT cp.ChapterId FROM dbo.ChapterCompletions cp JOIN dbo.CourseEnrolments e ON e.EnrolmentId=cp.EnrolmentId
                 JOIN dbo.CourseClasses cl ON cl.ClassId=e.ClassId JOIN dbo.Courses c ON c.CourseId=e.CourseId
-                JOIN dbo.CourseChapters ch ON ch.ChapterId=cp.ChapterId
+                JOIN dbo.TeacherChapterMaterials ch ON ch.ChapterId=cp.ChapterId AND ch.CourseId=e.CourseId AND ch.TeacherId=cl.TeacherId
                 WHERE e.StudentId=@actor AND cp.ChapterId=@chapter AND ch.IsPublished=1 AND "+Access,Id("@actor",student),Id("@chapter",chapter));
             return rows.Rows.Count==1;
         }

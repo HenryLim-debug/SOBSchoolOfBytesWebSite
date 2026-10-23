@@ -49,6 +49,9 @@ namespace SOBSchoolOfBytesWebSite.Learning
                     using(var command=Command(connection,transaction,@"INSERT dbo.CourseChapters(CourseId,ChapterNumber,Title)
                         SELECT @id,n,N'Chapter '+CONVERT(NVARCHAR(2),n) FROM (VALUES(1),(2),(3),(4),(5),(6),(7),(8),(9),(10)) numbers(n)
                         WHERE NOT EXISTS(SELECT 1 FROM dbo.CourseChapters WHERE CourseId=@id AND ChapterNumber=n)",Int("@id",id.Value)))command.ExecuteNonQuery();
+                    DataTable assignedTeachers=Query(connection,transaction,"SELECT TeacherId FROM dbo.TeacherCourses WHERE CourseId=@course",Int("@course",id.Value));
+                    foreach(DataRow teacher in assignedTeachers.Rows)
+                        MaterialService.EnsureTeacherChapters(connection,transaction,(int)teacher["TeacherId"]);
                     transaction.Commit();return id.Value;
                 }
             }

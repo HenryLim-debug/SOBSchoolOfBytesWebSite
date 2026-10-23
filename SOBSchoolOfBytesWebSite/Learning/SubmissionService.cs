@@ -9,10 +9,10 @@ namespace SOBSchoolOfBytesWebSite.Learning
     {
         private static string ConnectionString { get { return ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString; } }
         private const string Joins=@" FROM dbo.AssignmentSubmissions s
-            JOIN dbo.CourseChapters ch ON ch.ChapterId=s.ChapterId AND ch.CourseId=s.CourseId
             JOIN dbo.Courses c ON c.CourseId=s.CourseId
             JOIN dbo.CourseEnrolments e ON e.EnrolmentId=s.EnrolmentId AND e.CourseId=s.CourseId
             JOIN dbo.CourseClasses cl ON cl.ClassId=e.ClassId
+            JOIN dbo.TeacherChapterMaterials ch ON ch.ChapterId=s.ChapterId AND ch.CourseId=s.CourseId AND ch.TeacherId=cl.TeacherId
             JOIN dbo.userTable student ON student.Id=e.StudentId ";
         private const string StudentPermission=@"e.StudentId=@actor AND e.IsActive=1 AND ch.IsPublished=1
             AND student.usertype=N'Student' AND student.accountStatus=N'Approved'";
@@ -36,9 +36,9 @@ namespace SOBSchoolOfBytesWebSite.Learning
         public static DataRow StudentChapter(int studentId,int chapterId)
         {
             return One(Query(@"SELECT ch.ChapterId,ch.CourseId,ch.ChapterNumber,ch.Title,c.Title AS CourseTitle,cl.ClassName
-                FROM dbo.CourseChapters ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId
+                FROM dbo.TeacherChapterMaterials ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId
                 JOIN dbo.CourseEnrolments e ON e.CourseId=ch.CourseId JOIN dbo.CourseClasses cl ON cl.ClassId=e.ClassId
-                JOIN dbo.userTable student ON student.Id=e.StudentId WHERE ch.ChapterId=@chapter AND "+StudentPermission,
+                JOIN dbo.userTable student ON student.Id=e.StudentId WHERE ch.ChapterId=@chapter AND ch.TeacherId=cl.TeacherId AND "+StudentPermission,
                 Id("@actor",studentId),Id("@chapter",chapterId)));
         }
         public static DataTable StudentHistory(int studentId,int chapterId)
@@ -53,8 +53,10 @@ namespace SOBSchoolOfBytesWebSite.Learning
                 using(var command=new SqlCommand(@"IF NOT EXISTS(SELECT 1 FROM dbo.AssignmentSubmissions WITH(UPDLOCK,HOLDLOCK) WHERE RequestId=@request)
                     INSERT dbo.AssignmentSubmissions(ChapterId,CourseId,EnrolmentId,RequestId,FileName,FileData)
                     SELECT ch.ChapterId,ch.CourseId,e.EnrolmentId,@request,@name,@data
-                    FROM dbo.CourseChapters ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId
-                    JOIN dbo.CourseEnrolments e ON e.CourseId=ch.CourseId JOIN dbo.userTable student ON student.Id=e.StudentId
+                    FROM dbo.TeacherChapterMaterials ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId
+                    JOIN dbo.CourseEnrolments e ON e.CourseId=ch.CourseId
+                    JOIN dbo.CourseClasses cl ON cl.ClassId=e.ClassId AND cl.TeacherId=ch.TeacherId
+                    JOIN dbo.userTable student ON student.Id=e.StudentId
                     WHERE ch.ChapterId=@chapter AND "+StudentPermission+@";
                     SELECT COUNT(*) FROM dbo.AssignmentSubmissions s JOIN dbo.CourseEnrolments e ON e.EnrolmentId=s.EnrolmentId
                     WHERE s.RequestId=@request AND e.StudentId=@actor AND s.ChapterId=@chapter;",connection,transaction))

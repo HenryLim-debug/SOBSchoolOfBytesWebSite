@@ -11,11 +11,17 @@ namespace SOBSchoolOfBytesWebSite.Learning
     {
         private static string ConnectionString { get { return ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString; } }
         private const string ChapterColumns = "ch.ChapterId,ch.CourseId,ch.ChapterNumber,ch.Title,ch.LearningObjectives,ch.LessonText,ch.PracticeTask,ch.YouTubeVideoId,ch.IsPublished,ch.RowVersion,ch.SlidesName,ch.TutorialName";
-        private const string TeacherPermission = @"EXISTS(SELECT 1 FROM dbo.TeacherCourses tc WITH(HOLDLOCK)
+        private const string TeacherCoursePermission = @"EXISTS(SELECT 1 FROM dbo.TeacherCourses tc WITH(HOLDLOCK)
             JOIN dbo.userTable actor WITH(HOLDLOCK) ON actor.Id=tc.TeacherId
             WHERE tc.CourseId=c.CourseId AND tc.TeacherId=@actor AND actor.usertype=N'Teacher' AND actor.accountStatus=N'Active')";
-        private const string StudentPermission = @"EXISTS(SELECT 1 FROM dbo.CourseEnrolments e
+        private const string TeacherPermission = "ch.TeacherId=@actor AND "+TeacherCoursePermission;
+        private const string StudentCoursePermission = @"EXISTS(SELECT 1 FROM dbo.CourseEnrolments e
             JOIN dbo.userTable actor ON actor.Id=e.StudentId WHERE e.CourseId=c.CourseId AND e.StudentId=@actor
+            AND e.IsActive=1 AND actor.usertype=N'Student' AND actor.accountStatus=N'Approved')";
+        private const string StudentPermission = @"EXISTS(SELECT 1 FROM dbo.CourseEnrolments e
+            JOIN dbo.CourseClasses enrolledClass ON enrolledClass.ClassId=e.ClassId AND enrolledClass.CourseId=e.CourseId
+            JOIN dbo.userTable actor ON actor.Id=e.StudentId WHERE e.CourseId=c.CourseId AND e.StudentId=@actor
+            AND enrolledClass.TeacherId=ch.TeacherId
             AND e.IsActive=1 AND actor.usertype=N'Student' AND actor.accountStatus=N'Approved')";
         private static SqlParameter Id(string name, int value) { return new SqlParameter(name,SqlDbType.Int){Value=value}; }
         private static SqlParameter Text(string name,string value,int length) { return new SqlParameter(name,SqlDbType.NVarChar,length){Value=value}; }
@@ -31,18 +37,46 @@ namespace SOBSchoolOfBytesWebSite.Learning
             if(table.Rows.Count!=1) throw new ClassRuleException("This course or chapter is unavailable, or you do not have access to it.");
             return table.Rows[0];
         }
+        internal static void EnsureTeacherChapters(SqlConnection connection,SqlTransaction transaction,int teacherId)
+        {
+            // Teachers added or assigned to a new course get independent empty
+            // drafts. Existing rows (including deleted files) are never replaced.
+            using(var command=new SqlCommand(@"INSERT dbo.TeacherChapterMaterials
+                (TeacherId,ChapterId,CourseId,ChapterNumber,Title)
+                SELECT tc.TeacherId,ch.ChapterId,ch.CourseId,ch.ChapterNumber,N'Chapter '+CONVERT(NVARCHAR(2),ch.ChapterNumber)
+                FROM dbo.TeacherCourses tc JOIN dbo.CourseChapters ch ON ch.CourseId=tc.CourseId
+                WHERE tc.TeacherId=@teacher AND NOT EXISTS(SELECT 1 FROM dbo.TeacherChapterMaterials own WITH(UPDLOCK,HOLDLOCK)
+                    WHERE own.TeacherId=tc.TeacherId AND own.ChapterId=ch.ChapterId)",connection,transaction))
+            { command.Parameters.Add(Id("@teacher",teacherId)); command.ExecuteNonQuery(); }
+        }
         public static DataRow TeacherCourse(int teacherId)
-        { return One(Query("SELECT c.CourseId,c.Title FROM dbo.Courses c WHERE "+TeacherPermission,Id("@actor",teacherId))); }
+        {
+            DataRow course=One(Query("SELECT c.CourseId,c.Title FROM dbo.Courses c WHERE "+TeacherCoursePermission,Id("@actor",teacherId)));
+            using(var connection=new SqlConnection(ConnectionString))
+            {
+                connection.Open();using(var transaction=connection.BeginTransaction())
+                {
+                    ClassService.LockChanges(connection,transaction);
+                    EnsureTeacherChapters(connection,transaction,teacherId);
+                    transaction.Commit();
+                }
+            }
+            return course;
+        }
         public static DataTable TeacherChapters(int teacherId)
         {
+            TeacherCourse(teacherId);
             return Query(@"SELECT ch.ChapterId,ch.ChapterNumber,ch.Title,ch.IsPublished,
                 CASE WHEN ch.IsPublished=1 THEN N'Published' ELSE N'Draft' END AS PublicationStatus,
                 DATEADD(HOUR,8,ch.UpdatedAt) AS UpdatedAtLocal
-                FROM dbo.CourseChapters ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId WHERE "+TeacherPermission+
+                FROM dbo.TeacherChapterMaterials ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId WHERE "+TeacherPermission+
                 " ORDER BY ch.ChapterNumber",Id("@actor",teacherId));
         }
         public static DataRow TeacherChapter(int teacherId,int chapterId)
-        { return One(Query("SELECT "+ChapterColumns+" FROM dbo.CourseChapters ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId WHERE ch.ChapterId=@chapter AND "+TeacherPermission,Id("@actor",teacherId),Id("@chapter",chapterId))); }
+        {
+            TeacherCourse(teacherId);
+            return One(Query("SELECT "+ChapterColumns+" FROM dbo.TeacherChapterMaterials ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId WHERE ch.ChapterId=@chapter AND "+TeacherPermission,Id("@actor",teacherId),Id("@chapter",chapterId)));
+        }
 
         public static string VideoId(string link)
         {
@@ -73,7 +107,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
                 throw new ClassRuleException("Choose either a replacement file or Remove for each document, then save again.");
             if(version==null || version.Length!=8) throw new ClassRuleException("Reopen the chapter before saving it.");
             string videoId=VideoId(videoLink);
-            // The version check below ensures this publication check cannot race another teacher's edit.
+            // The version check protects concurrent edits to this teacher's own chapter.
             DataRow current=TeacherChapter(teacherId,chapterId);
             bool hasSlides=slides!=null || (!removeSlides && current["SlidesName"]!=DBNull.Value);
             bool hasTutorial=tutorial!=null || (!removeTutorial && current["TutorialName"]!=DBNull.Value);
@@ -86,7 +120,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
                 TutorialName=CASE WHEN @removeTutorial=1 THEN NULL ELSE COALESCE(@tutorialName,ch.TutorialName) END,
                 TutorialData=CASE WHEN @removeTutorial=1 THEN NULL ELSE COALESCE(@tutorialData,ch.TutorialData) END,
                 YouTubeVideoId=@video,IsPublished=@published,UpdatedAt=SYSUTCDATETIME(),UpdatedBy=@actor
-                FROM dbo.CourseChapters ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId
+                FROM dbo.TeacherChapterMaterials ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId
                 WHERE ch.ChapterId=@chapter AND ch.RowVersion=@version AND "+TeacherPermission,connection))
             {
                 command.Parameters.AddRange(new[]{Id("@actor",teacherId),Id("@chapter",chapterId),Text("@title",title,120),
@@ -116,7 +150,7 @@ namespace SOBSchoolOfBytesWebSite.Learning
                     THEN 0 ELSE ch.IsPublished END,
                 UpdatedAt=SYSUTCDATETIME(),UpdatedBy=@actor
                 OUTPUT inserted.SlidesName,inserted.TutorialName,inserted.IsPublished,inserted.RowVersion
-                FROM dbo.CourseChapters ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId
+                FROM dbo.TeacherChapterMaterials ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId
                 WHERE ch.ChapterId=@chapter AND ch.RowVersion=@version
                     AND ((@slides=1 AND ch.SlidesData IS NOT NULL) OR (@slides=0 AND ch.TutorialData IS NOT NULL)) AND "+TeacherPermission,
                 Id("@actor",teacherId),Id("@chapter",chapterId),new SqlParameter("@slides",SqlDbType.Bit){Value=slides},
@@ -125,16 +159,16 @@ namespace SOBSchoolOfBytesWebSite.Learning
             return result.Rows[0];
         }
         public static DataRow StudentCourse(int studentId,int courseId)
-        { return One(Query("SELECT c.CourseId,c.Title,c.Description FROM dbo.Courses c WHERE c.CourseId=@course AND "+StudentPermission,Id("@actor",studentId),Id("@course",courseId))); }
+        { return One(Query("SELECT c.CourseId,c.Title,c.Description FROM dbo.Courses c WHERE c.CourseId=@course AND "+StudentCoursePermission,Id("@actor",studentId),Id("@course",courseId))); }
         public static DataTable PublishedChapters(int studentId,int courseId)
         {
-            return Query(@"SELECT ch.ChapterId,ch.CourseId,ch.ChapterNumber,ch.Title FROM dbo.CourseChapters ch
+            return Query(@"SELECT ch.ChapterId,ch.CourseId,ch.ChapterNumber,ch.Title FROM dbo.TeacherChapterMaterials ch
                 JOIN dbo.Courses c ON c.CourseId=ch.CourseId WHERE c.CourseId=@course AND ch.IsPublished=1 AND "+StudentPermission+
                 " ORDER BY ch.ChapterNumber",Id("@actor",studentId),Id("@course",courseId));
         }
         public static DataRow StudentChapter(int studentId,int courseId,int chapterId)
         {
-            return One(Query("SELECT "+ChapterColumns+@" FROM dbo.CourseChapters ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId
+            return One(Query("SELECT "+ChapterColumns+@" FROM dbo.TeacherChapterMaterials ch JOIN dbo.Courses c ON c.CourseId=ch.CourseId
                 WHERE c.CourseId=@course AND ch.ChapterId=@chapter AND ch.IsPublished=1 AND "+StudentPermission,
                 Id("@actor",studentId),Id("@course",courseId),Id("@chapter",chapterId)));
         }
@@ -143,7 +177,8 @@ namespace SOBSchoolOfBytesWebSite.Learning
             if(role!="Teacher" && role!="Student") throw new ClassRuleException("Document unavailable.");
             string prefix=slides ? "Slides" : "Tutorial";
             string permission=role=="Teacher" ? TeacherPermission : "ch.IsPublished=1 AND "+StudentPermission;
-            return One(Query("SELECT ch."+prefix+"Name AS FileName,ch."+prefix+"Data AS FileData FROM dbo.CourseChapters ch "+
+            if(role=="Teacher") TeacherCourse(actorId);
+            return One(Query("SELECT ch."+prefix+"Name AS FileName,ch."+prefix+"Data AS FileData FROM dbo.TeacherChapterMaterials ch "+
                 "JOIN dbo.Courses c ON c.CourseId=ch.CourseId WHERE ch.ChapterId=@chapter AND ch."+prefix+"Data IS NOT NULL AND "+permission,
                 Id("@actor",actorId),Id("@chapter",chapterId)));
         }

@@ -184,6 +184,7 @@ namespace SOBSchoolOfBytesWebSite
                     command.CommandText = @"UPDATE dbo.TeacherCourses SET CourseId=@course,AssignedAt=SYSUTCDATETIME() WHERE TeacherId=@id;
                         IF @@ROWCOUNT=0 INSERT INTO dbo.TeacherCourses(TeacherId,CourseId) VALUES (@id,@course);";
                     command.ExecuteNonQuery();
+                    MaterialService.EnsureTeacherChapters(connection, transaction, teacherId);
                     transaction.Commit();
                 }
             }

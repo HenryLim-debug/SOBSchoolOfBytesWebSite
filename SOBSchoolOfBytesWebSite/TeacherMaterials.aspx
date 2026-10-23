@@ -5,7 +5,7 @@
             <div><h1>Teaching Materials</h1><h2 class="h4"><asp:Literal ID="CourseTitle" runat="server" Mode="Encode" /></h2></div>
             <a runat="server" href="~/TeacherDashboard" class="btn btn-outline-secondary align-self-start">Back to Dashboard</a>
         </div>
-        <p>Each course has 10 chapters. Teachers assigned to the same course share these materials. Only published chapters are visible to enrolled students.</p>
+        <p>You manage your own 10 chapters for this course. Your published materials are visible to students in your classes.</p>
         <asp:Panel ID="FeedbackPanel" runat="server" Visible="false" role="status"><asp:Literal ID="FeedbackMessage" runat="server" Mode="Encode" /></asp:Panel>
         <div class="table-responsive">
             <asp:GridView ID="Chapters" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered align-middle" GridLines="None" EmptyDataText="No chapters are available for your assigned course.">
