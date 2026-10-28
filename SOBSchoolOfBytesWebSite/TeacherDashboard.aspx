@@ -7,22 +7,48 @@
             <asp:Button ID="SignOutButton" runat="server" Text="Sign Out" CssClass="btn btn-outline-secondary"
                 CausesValidation="false" OnClick="SignOutButton_Click" />
         </div>
-        <nav class="sob-dashboard-actions" aria-label="Teacher shortcuts">
-            <a runat="server" href="~/CourseApplications" class="btn btn-primary">Review Course Applications</a>
-            <a runat="server" href="~/TeacherMaterials" class="btn btn-outline-primary">Manage Teaching Materials</a>
-            <a runat="server" href="~/TeacherSubmissions" class="btn btn-outline-primary">Review Student Work</a>
-            <a runat="server" href="~/TeachingHours" class="btn btn-outline-primary">My Teaching Hours</a>
-            <a runat="server" href="~/TeacherSalary" class="btn btn-outline-primary">My Salary</a>
-    <a runat="server" href="~/Payslips" class="btn btn-outline-primary mb-3">My Payslips</a>
-            <a runat="server" href="~/ClassMeetings" class="btn btn-outline-primary">Class Meeting Links</a>
-        <a runat="server" href="~/Attendance" class="btn btn-outline-primary">Record Attendance</a>
-        <a runat="server" href="~/LearningProgress" class="btn btn-outline-primary">Review Learning Progress</a>
+        <nav class="sob-dashboard-menu" aria-labelledby="teacherToolsTitle">
+            <h2 id="teacherToolsTitle">Teaching tools</h2>
+            <p class="sob-dashboard-menu-hint">Select a category to view its options.</p>
+            <div class="sob-dashboard-groups">
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">Classes &amp; Enrolment</span><span class="sob-action-group-description">Review applications, your timetable and meeting links.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a runat="server" href="~/CourseApplications">Review Course Applications</a></li>
+                        <li><a href="#teachingClassesTitle">My Classes and Timetable</a></li>
+                        <li><a runat="server" href="~/ClassMeetings">Class Meeting Links</a></li>
+                    </ul>
+                </details>
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">Teaching &amp; Assessment</span><span class="sob-action-group-description">Prepare learning materials and assess student work.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a runat="server" href="~/TeacherMaterials">Manage Teaching Materials</a></li>
+                        <li><a runat="server" href="~/TeacherSubmissions">Review Student Work</a></li>
+                    </ul>
+                </details>
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">Attendance &amp; Progress</span><span class="sob-action-group-description">Record attendance and follow your students' learning.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a runat="server" href="~/Attendance">Record Attendance</a></li>
+                        <li><a runat="server" href="~/LearningProgress">Review Learning Progress</a></li>
+                    </ul>
+                </details>
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">Hours &amp; Pay</span><span class="sob-action-group-description">Submit teaching hours and view your salary and payslips.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a runat="server" href="~/TeachingHours">My Teaching Hours</a></li>
+                        <li><a runat="server" href="~/TeacherSalary">My Salary</a></li>
+                        <li><a runat="server" href="~/Payslips">My Payslips</a></li>
+                    </ul>
+                </details>
+            </div>
         </nav>
         <section class="card p-4 mt-3" aria-labelledby="teacherAccountTitle">
             <h2 id="teacherAccountTitle" class="h4">Your Account</h2>
             <p>Username: <asp:Literal ID="TeacherUsername" runat="server" Mode="Encode" /></p>
             <p>Staff ID: <asp:Literal ID="TeacherStaffId" runat="server" Mode="Encode" /></p>
             <p class="mb-0">Your teacher account is active.</p>
+            <p class="mt-3 mb-0"><a runat="server" href="~/RecoverySettings">My Recovery Code</a></p>
         </section>
         <section class="mt-4" aria-labelledby="myCourseTitle">
             <h2 id="myCourseTitle">My Course</h2>
@@ -58,6 +84,5 @@
                 </asp:GridView>
             </div>
         </section>
-        <p class="mt-4"><a runat="server" href="~/RecoverySettings" class="btn btn-outline-primary">My Recovery Code</a></p>
     </main>
 </asp:Content>

@@ -13,8 +13,8 @@
     </asp:PlaceHolder>
 
     <webopt:bundlereference runat="server" path="~/Content/css" />
-    <link runat="server" href="~/Content/sob-theme.css?v=20261022" rel="stylesheet" />
-    <link runat="server" href="~/Images/sob-icon.svg" rel="icon" type="image/svg+xml" />
+    <link runat="server" href="~/Content/sob-theme.css?v=20261028-dashboard-colours" rel="stylesheet" />
+    <link runat="server" href="~/Images/sob-logo.png?v=20261023-logo" rel="icon" type="image/png" />
 
 </head>
 <body class="sob-site">
@@ -41,7 +41,7 @@
 
         <nav class="navbar navbar-expand-lg navbar-light sob-navbar" aria-label="Main navigation">
             <div class="container">
-                <a class="navbar-brand sob-brand" runat="server" href="~/" aria-label="SOB School of Bytes home"><img runat="server" src="~/Images/sob-logo.png" alt="SOB School of Bytes" width="194" height="94" /></a>
+                <a class="navbar-brand sob-brand" runat="server" href="~/" aria-label="SOB School of Bytes home"><img runat="server" src="~/Images/sob-logo.png?v=20261023-logo" alt="SOB School of Bytes" width="928" height="727" /></a>
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#sobNavigation" title="Toggle navigation" aria-controls="sobNavigation"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>

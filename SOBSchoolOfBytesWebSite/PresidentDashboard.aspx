@@ -15,16 +15,42 @@
             <div class="col-sm-6 col-lg-3"><div class="card p-3"><h2 class="h6">Approved students</h2><asp:Literal ID="ApprovedCount" runat="server" Mode="Encode" /></div></div>
             <div class="col-sm-6 col-lg-3"><div class="card p-3"><h2 class="h6">Active teachers</h2><asp:Literal ID="TeacherCount" runat="server" Mode="Encode" /></div></div>
         </div>
-        <nav class="sob-dashboard-actions" aria-label="President shortcuts">
-            <a runat="server" href="~/TeacherManagement" class="btn btn-primary">Manage Teachers</a>
-            <a runat="server" href="~/StudentManagement" class="btn btn-outline-primary">Manage Students</a>
-            <a runat="server" href="~/CourseManagement" class="btn btn-outline-primary">Manage Courses</a>
-            <a runat="server" href="~/ClassManagement" class="btn btn-outline-primary">Manage Classes</a>
-            <a runat="server" href="~/ReviewTeachingHours" class="btn btn-outline-primary">Review Teaching Hours</a>
-            <a runat="server" href="~/SalaryManagement" class="btn btn-outline-primary">Teacher Salaries</a>
-    <a runat="server" href="~/Payslips" class="btn btn-outline-primary mb-3">Issue / View Payslips</a>
-        <a runat="server" href="~/Attendance" class="btn btn-outline-primary">Review Attendance</a>
-        <a runat="server" href="~/LearningProgress" class="btn btn-outline-primary">Review Learning Progress</a>
+        <nav class="sob-dashboard-menu" aria-labelledby="presidentToolsTitle">
+            <h2 id="presidentToolsTitle">School management</h2>
+            <p class="sob-dashboard-menu-hint">Select a category to view its options.</p>
+            <div class="sob-dashboard-groups">
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">People &amp; Accounts</span><span class="sob-action-group-description">Manage students, teachers and your recovery code.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a runat="server" href="~/TeacherManagement">Manage Teachers</a></li>
+                        <li><a runat="server" href="~/StudentManagement">Manage Students</a></li>
+                        <li><a runat="server" href="~/RecoverySettings">My Recovery Code</a></li>
+                    </ul>
+                </details>
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">Courses &amp; Classes</span><span class="sob-action-group-description">Maintain courses, class groups and schedules.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a runat="server" href="~/CourseManagement">Manage Courses</a></li>
+                        <li><a runat="server" href="~/ClassManagement">Manage Classes</a></li>
+                    </ul>
+                </details>
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">Student Monitoring</span><span class="sob-action-group-description">Review registrations, attendance and learning progress.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a href="#pendingTitle">Student Approval</a></li>
+                        <li><a runat="server" href="~/Attendance">Review Attendance</a></li>
+                        <li><a runat="server" href="~/LearningProgress">Review Learning Progress</a></li>
+                    </ul>
+                </details>
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">Teaching &amp; Payroll</span><span class="sob-action-group-description">Review teaching hours, salaries and monthly payslips.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a runat="server" href="~/ReviewTeachingHours">Review Teaching Hours</a></li>
+                        <li><a runat="server" href="~/SalaryManagement">Teacher Salaries</a></li>
+                        <li><a runat="server" href="~/Payslips">Issue / View Payslips</a></li>
+                    </ul>
+                </details>
+            </div>
         </nav>
         <section class="mt-4" aria-labelledby="pendingTitle">
             <h2 id="pendingTitle">Student Approval</h2>
@@ -56,6 +82,5 @@
                 </asp:GridView>
             </div>
         </section>
-        <p class="mt-4"><a runat="server" href="~/RecoverySettings" class="btn btn-outline-primary">My Recovery Code</a></p>
     </main>
 </asp:Content>

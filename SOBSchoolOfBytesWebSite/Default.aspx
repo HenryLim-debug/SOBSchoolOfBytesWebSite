@@ -29,7 +29,7 @@
             <div class="sob-hero-art">
                 <span class="sob-art-spark sob-spark-one" aria-hidden="true">+</span>
                 <span class="sob-art-spark sob-spark-two" aria-hidden="true">&lt;/&gt;</span>
-                <img runat="server" src="~/Images/sob-logo.png" alt="A cheerful computer beneath a rainbow, with the SOB School of Bytes name" width="1782" height="864" fetchpriority="high" />
+                <img runat="server" src="~/Images/sob-logo.png?v=20261023-logo" alt="School of Bytes logo: a cheerful computer above an open book beneath a rainbow" width="928" height="727" fetchpriority="high" />
                 <div class="sob-art-caption"><span aria-hidden="true">&#9733;</span> A bright start to your digital adventure</div>
             </div>
         </section>
