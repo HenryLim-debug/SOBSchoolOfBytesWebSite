@@ -12,12 +12,37 @@
         </div>
         <div class="alert alert-success">Your student account is approved.</div>
         <p>Signed in as <strong><asp:Literal ID="StudentUsername" runat="server" Mode="Encode" /></strong>.</p>
-        <h2>Explore your learning options</h2>
-        <p>Discover computer fundamentals, internet safety, office applications and beginner Python.</p>
-        <nav class="sob-dashboard-actions" aria-label="Student shortcuts">
-        <a class="btn btn-primary" runat="server" href="~/Courses">Browse Our Courses</a>
-        <a runat="server" href="~/StudentAttendance" class="btn btn-outline-primary">My Attendance</a>
-        <a runat="server" href="~/LearningProgress" class="btn btn-outline-primary">My Learning Progress</a>
+        <nav class="sob-dashboard-menu" aria-labelledby="studentOptionsTitle">
+            <h2 id="studentOptionsTitle">Explore your learning options</h2>
+            <p class="sob-dashboard-menu-hint">Select a category to view its options.</p>
+            <div class="sob-dashboard-groups">
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">Courses &amp; Applications</span><span class="sob-action-group-description">Explore courses and check your class applications.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a runat="server" href="~/Courses">Browse Our Courses</a></li>
+                        <li><a href="#myApplicationsTitle">My Course Applications</a></li>
+                    </ul>
+                </details>
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">Classes &amp; Learning</span><span class="sob-action-group-description">Check your timetable, join online classes and open learning materials.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a href="#myClassesTitle">My Timetable &amp; Learning Materials</a></li>
+                    </ul>
+                </details>
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">Attendance &amp; Progress</span><span class="sob-action-group-description">Review your attendance and follow your learning progress.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a runat="server" href="~/StudentAttendance">My Attendance</a></li>
+                        <li><a runat="server" href="~/LearningProgress">My Learning Progress</a></li>
+                    </ul>
+                </details>
+                <details class="sob-action-group">
+                    <summary><span><span class="sob-action-group-title">My Account</span><span class="sob-action-group-description">Keep a recovery code to help you reset a forgotten password.</span></span></summary>
+                    <ul class="sob-action-links">
+                        <li><a runat="server" href="~/RecoverySettings">My Recovery Code</a></li>
+                    </ul>
+                </details>
+            </div>
         </nav>
 
         <asp:Panel ID="FeedbackPanel" runat="server" Visible="false" role="status"><asp:Literal ID="FeedbackMessage" runat="server" Mode="Encode" /></asp:Panel>
@@ -78,6 +103,5 @@
                 </asp:GridView>
             </div>
         </section>
-        <p class="mt-4"><a runat="server" href="~/RecoverySettings" class="btn btn-outline-primary">My Recovery Code</a></p>
     </main>
 </asp:Content>
